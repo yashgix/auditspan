@@ -29,7 +29,7 @@ SEVERITY = r"\b(?:material weakness|significant deficiency)\b"
 BEFORE = [
     r"(?:\[\s*\]|☐|□)\s*$",
     r"\b(?:not|no|nor)\b[^.\n]{0,30}$",
-    r"(?:\bor|and/or)\s+(?:an?\s+)?$",
+    r"(?:\bor|\band/or)\s+(?:an?\s+)?$",
 ]
 AFTER = [
     r"^\s+(?:or|and/or)\s+(?:an?\s+)?(?:material|significant)\b",
@@ -39,8 +39,7 @@ AFTER = [
 REPEAT_LABEL = (
     r"^[^\S\n]*(?:identification (?:as|of)[^:\n–]*?repeat[^:\n–]*(?=[:–])"
     r"|repeat finding(?: from (?:the )?prior (?:year\(s\)|years?|audits?))?\??"
-    r"|prior[- ]year finding(?: number)?)"
-    + TAIL
+    r"|prior[- ]year finding(?: number)?)" + TAIL
 )
 REPEAT_NO = r"^(?:no\b|n/a|none|new\b)|^[^.]*\bnot\b"
 REPEAT_YES = (
@@ -54,10 +53,7 @@ BELOW_THRESHOLD = r"\b(?:threshold|below|under|less than)\b"
 NO_COSTS = r"^(?:none|n/?a\b|not applicable|no\b|\$\s*0(?:\.00)?(?![\d.,])|0(?![\d.,])|\$\s*-)"
 AMOUNT = r"\$\s*(\d[\d,]*(?:\.\d+)?)"
 NO_COSTS_SENTENCE = r"\b(?:there (?:were|are|was|is) no|no) (?:known )?questioned costs?\b"
-REQUIREMENT_LABEL = (
-    r"^[^\S\n]*(?:type of )?compliance requirements?(?: affected| type)?(?:\(s\))?"
-    + TAIL
-)
+REQUIREMENT_LABEL = r"^[^\S\n]*(?:type of )?compliance requirements?(?: affected| type)?(?:\(s\))?" + TAIL
 DASH = r"\s[–—-]\s"
 
 _NEXT_LINE = re.compile(NEXT_LINE)

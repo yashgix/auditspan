@@ -6,10 +6,10 @@ from dataclasses import FrozenInstanceError
 from findingtrace import DATA_DIR
 from findingtrace.data import load
 from findingtrace.extract import (
-    extract,
-    Fact,
     FIELDS,
     MAX_VALUE,
+    Fact,
+    extract,
     questioned_costs,
     repeat,
     requirement_letters,

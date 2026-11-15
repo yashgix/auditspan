@@ -22,9 +22,7 @@ def disagreement_keys(findings: Iterable[Finding]) -> dict[str, list[tuple[str, 
     compared = {finding.key: compare(finding) for finding in items}
     keys: dict[str, list[tuple[str, str]]] = {}
     for index, field in enumerate(FIELDS):
-        pool = sorted(
-            key for key, results in compared.items() if results[field][1] == "disagree" and key not in taken
-        )
+        pool = sorted(key for key, results in compared.items() if results[field][1] == "disagree" and key not in taken)
         drawn = random.Random(SEED + 1 + index).sample(pool, min(PER_FIELD, len(pool)))
         taken.update(drawn)
         keys[field] = drawn

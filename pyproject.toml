@@ -6,6 +6,7 @@ dependencies = ["numpy"]
 
 [tool.ruff]
 line-length = 120
+extend-exclude = ["*.md"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]

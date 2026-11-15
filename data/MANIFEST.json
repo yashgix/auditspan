@@ -1,0 +1,24 @@
+{
+ "source": "https://app.fac.gov/dissemination/public-data/gsa/audit-year/2025-ay-{table}.csv",
+ "source_page": "https://www.fac.gov/data/download/",
+ "fetched": "2026-11-14",
+ "subset": "rows of the FAC's 2025 files (the FAC accepted them in calendar 2025) with fac_accepted_date 2025-07-01 to 2025-12-31, in upstream order; rebuilt by tools/fetch_data.py",
+ "license": "Public domain: 'The data collected by the FAC is free to use and in the public domain' (https://www.fac.gov/data/, read 2026-11-14); see LICENSE-FAC.md",
+ "labels": "labels.json is original to this repository: labelled by Claude (an Anthropic AI model) from the finding text, not by an auditor",
+ "files": {
+  "findings.csv": {
+   "sha256": "0f4218667f2fb795c6b6e50d2d49e1c8a7c9ba505c4b50d38acb5a4c9fdc295c",
+   "bytes": 2084517,
+   "rows": 21183
+  },
+  "findings_text.csv": {
+   "sha256": "b329d15f2e72b1f5f0c620a5551432ac443dcbcb8f3ce882f49aa62ac648fcf5",
+   "bytes": 15586089,
+   "rows": 8772
+  },
+  "labels.json": {
+   "sha256": "8b55944f520dbe746f60ff9426d3ba9284e589f8e9a843efc3e6117369cc7a71",
+   "bytes": 33337
+  }
+ }
+}

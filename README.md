@@ -97,8 +97,9 @@ quote is cut from the text by its start and end. It shows the tool never paraphr
 supports its fact. A severity quote is only the two words "material weakness" or "significant deficiency", so a reader
 checks the surrounding text.
 
-Version 2 changes only the requirements field (see `SPEC-v2.md`). It fixes two misreads of v1, and it stops counting
-two kinds of difference as disagreements. One kind is A versus B: "activities allowed or unallowed" and "allowable
+Version 2 changes only the requirements field (see `SPEC-v2.md`). It also reads the finding's title line, more label
+wordings and explicit letter codes, and it fixes misreads of v1. It stops counting two kinds of difference as
+disagreements. One kind is A versus B: "activities allowed or unallowed" and "allowable
 costs" are often tested together, and auditors file either letter. The other is a form that says P ("Other"), which the
 text cannot be checked against. The v1 numbers stay as they were, and the v1 example table shows each example's
 version 2 outcome. The version 2 lines come from `results/metrics_v2.json`.
@@ -134,15 +135,15 @@ Labels: labelled by Claude from the text, not by an auditor.
 | requirements | 2024-12-GSAFAC-0000381878 2024-006 | AB | B | Compliance Requirement Affected: Activities Allowed/Allowable Costs | a_vs_b |
 
 ### Version 2: requirements (SPEC-v2.md; the other fields are as in version 1)
-- requirements: 850 covered, 828 agree, 8 disagree (0.9% [0.2%, 1.9%]); 6 reports; 33 form rows differ.
-- requirements outcomes not counted as disagreements: 10 differ only in A versus B, 4 uncheckable (the form says P, Other).
+- requirements: 2502 covered, 2307 agree, 94 disagree (3.8% [2.9%, 4.7%]); 82 reports; 33 form rows differ.
+- requirements outcomes not counted as disagreements: 53 differ only in A versus B, 48 uncheckable (the form says P, Other).
 
-Labelled sample, version 2:
-- requirements: precision 92.9% [68.5%, 98.7%] (13/14); recall 26.0% [15.9%, 39.6%] (13/50); confirmed flags 50.0% [18.8%, 81.2%] (3/6).
+Labelled sample, version 2. The version 2 rules were written while reading this sample, so these scores are in-sample, not a measure on new findings:
+- requirements: precision 95.9% [86.3%, 98.9%] (47/49); recall 94.0% [83.8%, 97.9%] (47/50); confirmed flags 50.0% [18.8%, 81.2%] (3/6).
 
 | field | finding | text value | form value | quote |
 | --- | --- | --- | --- | --- |
-| requirements | 2023-09-GSAFAC-0000374131 2023-003 | AE | E | Compliance Requirement: Eligibility and Allowable Activities/Costs |
+| requirements | 2023-09-GSAFAC-0000374131 2023-003 | ABE | E | Compliance Requirement: Eligibility and Allowable Activities/Costs |
 <!-- results:end -->
 
 ## Limits
@@ -153,8 +154,8 @@ Labelled sample, version 2:
   later labelled the disagreement strata. `flag_precision` is therefore not an out-of-sample measure. Only the random
   stratum is, and about 2 of its 100 findings may overlap those read during development.
 - Rules miss facts stated in unusual ways. Recall is reported per field and is low for requirements, where only
-  labelled lines are read. Many findings name the requirement only in their title line, which neither version
-  reads yet. Multi-part findings (a different severity per part) and one text covering two findings are
+  labelled lines are read. Version 2 also reads title lines, but its rules were written while reading the
+  random labelled sample, so its scores there are in-sample until a fresh blind sample is scored. Multi-part findings (a different severity per part) and one text covering two findings are
   known error sources for severity and requirements.
 - Questioned costs under the $25,000 reporting threshold are skipped when the text says so; a small stated amount with
   the form saying "no" is still listed, though the threshold may explain it.

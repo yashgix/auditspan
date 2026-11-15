@@ -23,8 +23,6 @@ LETTERS = {
     "M": r"subrecipient monitoring",
     "N": r"special tests",
 }
-# SPEC-v2: singular "special test", and the Single Audit "reporting package" is not the Reporting requirement.
-LETTERS_V2 = {**LETTERS, "L": r"reporting(?! package)", "N": r"special tests?"}
 TAIL = r"[^\S\n]*[:–—-]?[^\S\n]*(?P<value>[^\n]*)"
 NEXT_LINE = r"\n\s*(\S[^\n]*)"
 SEVERITY = r"\b(?:material weakness|significant deficiency)\b"
@@ -70,7 +68,7 @@ class Fact:
     quote: str
 
 
-def _labelled_values(pattern: str, text: str):
+def labelled_values(pattern: str, text: str):
     for match in re.finditer(pattern, text, LINES):
         value = match.group("value")
         end = match.end()
@@ -101,7 +99,7 @@ def severity(text: str) -> Fact | None:
 
 
 def repeat(text: str) -> Fact | None:
-    for value, start, end in _labelled_values(REPEAT_LABEL, text):
+    for value, start, end in labelled_values(REPEAT_LABEL, text):
         if re.search(REPEAT_NO, value, CASE):
             return Fact("repeat", False, start, end, text[start:end])
         if re.match(REPEAT_YES, value, CASE):
@@ -114,7 +112,7 @@ def repeat(text: str) -> Fact | None:
 
 
 def questioned_costs(text: str) -> Fact | None:
-    for value, start, end in _labelled_values(QUESTIONED_LABEL, text):
+    for value, start, end in labelled_values(QUESTIONED_LABEL, text):
         if re.search(BELOW_THRESHOLD, value, CASE):
             continue
         if re.match(NO_COSTS, value, CASE):
@@ -136,18 +134,18 @@ def requirement_letters(value: str, letters: dict[str, str] = LETTERS) -> str:
     return ""
 
 
-def requirements(text: str, letters: dict[str, str] = LETTERS) -> Fact | None:
-    for value, start, end in _labelled_values(REQUIREMENT_LABEL, text):
-        found = requirement_letters(value, letters)
+def requirements(text: str) -> Fact | None:
+    for value, start, end in labelled_values(REQUIREMENT_LABEL, text):
+        found = requirement_letters(value)
         if found:
             return Fact("requirements", found, start, end, text[start:end])
     return None
 
 
-def extract(text: str, letters: dict[str, str] = LETTERS) -> dict[str, Fact | None]:
+def extract(text: str) -> dict[str, Fact | None]:
     return {
         "severity": severity(text),
         "repeat": repeat(text),
         "questioned_costs": questioned_costs(text),
-        "requirements": requirements(text, letters),
+        "requirements": requirements(text),
     }

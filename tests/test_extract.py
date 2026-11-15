@@ -7,7 +7,6 @@ from findingtrace import DATA_DIR
 from findingtrace.data import load
 from findingtrace.extract import (
     FIELDS,
-    LETTERS_V2,
     MAX_VALUE,
     Fact,
     extract,
@@ -194,24 +193,6 @@ class RequirementsTest(FactTestCase):
 
     def test_unrecognised_value_is_none(self):
         self.assertIsNone(requirements("Compliance requirements: General"))
-
-
-class RequirementsV2Test(unittest.TestCase):
-    def test_singular_special_test_is_n(self):
-        text = "Compliance Requirement: Special Test and Provision \u2013 Federal Interest in Real Property"
-        self.assertEqual(requirements(text).value, "F")
-        self.assertEqual(requirements(text, LETTERS_V2).value, "N")
-
-    def test_reporting_package_is_not_reporting(self):
-        text = "Compliance Requirement: Data Collection Form and Single Audit Reporting Package"
-        self.assertEqual(requirements(text).value, "L")
-        self.assertIsNone(requirements(text, LETTERS_V2))
-        self.assertEqual(requirements("Compliance Requirement: Reporting", LETTERS_V2).value, "L")
-
-    def test_extract_passes_letters_to_requirements_only(self):
-        text = "Compliance Requirement: Special Test and Provisions"
-        self.assertIsNone(extract(text)["requirements"])
-        self.assertEqual(extract(text, LETTERS_V2)["requirements"].value, "N")
 
 
 class ExtractTest(FactTestCase):

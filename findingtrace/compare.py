@@ -1,7 +1,8 @@
 """Compare extracted facts with the auditor-filed SF-SAC flags."""
 
 from .data import Finding, Form
-from .extract import FIELDS, LETTERS, LETTERS_V2, Fact, extract
+from .extract import FIELDS, Fact, extract
+from .requirements_v2 import requirements_v2
 
 OUTCOMES = ("silent", "agree", "disagree")
 OUTCOMES_V2 = (*OUTCOMES, "a_vs_b", "uncheckable")
@@ -63,5 +64,7 @@ def outcome(fact: Fact | None, form: Form, v2: bool = False) -> str:
 
 
 def compare(finding: Finding, v2: bool = False) -> dict[str, tuple[Fact | None, str]]:
-    facts = extract(finding.text, LETTERS_V2 if v2 else LETTERS)
+    facts = extract(finding.text)
+    if v2:
+        facts["requirements"] = requirements_v2(finding.text)
     return {field: (facts[field], outcome(facts[field], finding.form, v2)) for field in FIELDS}

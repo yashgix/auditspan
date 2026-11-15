@@ -111,8 +111,9 @@ contradiction. Naming one the form does not list is.
 
 ### Version 2
 `SPEC-v2.md` adds two requirements outcomes beside v1's. Text letters missing from the form only because of A versus
-B are `a_vs_b`. Missing letters on a form that lists P (Other) are `uncheckable`. Version 2 also reads the singular
-"Special Test" as N and does not read "Single Audit Reporting Package" as Reporting. v1 is unchanged, and both sets of
+B are `a_vs_b`. Missing letters on a form that lists P (Other) are `uncheckable`. Version 2 extraction
+(`requirements_v2.py`) adds more label wordings, explicit letter codes such as "(L.)", the finding's title line, and
+exclusions for phrases that only look like a requirement, such as "SEFA reporting". v1 is unchanged, and both sets of
 metrics are written.
 
 ## 5. Two kinds of interval

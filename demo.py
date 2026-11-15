@@ -142,7 +142,8 @@ def _v2_lines(metrics: dict, findings: dict, rows: list[dict]) -> list[str]:
         f"- requirements outcomes not counted as disagreements: {metrics['a_vs_b'][index]} differ only in A versus "
         f"B, {metrics['uncheckable'][index]} uncheckable (the form says P, Other).",
         "",
-        "Labelled sample, version 2:",
+        "Labelled sample, version 2. The version 2 rules were written while reading this sample, so these scores "
+        "are in-sample, not a measure on new findings:",
         _quality_line(metrics, "requirements"),
         "",
         "| field | finding | text value | form value | quote |",

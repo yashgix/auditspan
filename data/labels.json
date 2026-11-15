@@ -1,0 +1,1520 @@
+{
+ "labeller": "Claude (an Anthropic AI model), from the finding text alone; not an auditor, and not reviewed by one",
+ "labelled_on": "2026-11-14",
+ "method": "Each finding's text was read in full (texts over 4,000 characters: the first 4,000 plus every later line mentioning repeat, prior, questioned costs, material weakness, significant deficiency or compliance requirement). The random stratum was labelled without seeing the extractor's output or the form's flags; a disagreement stratum's finding was known to be flagged on its field, but its extracted value and form flags were not shown. null means the text does not state the fact.",
+ "fields": {
+  "severity": "material_weakness or significant_deficiency: the classification the text gives this finding; definitions, prior-year statements, other findings and unticked boxes do not count; when parts of one finding differ, the most severe",
+  "repeat": "true or false: whether the text says this finding repeats a prior-year finding",
+  "questioned_costs": "true if the text reports a questioned-cost amount above zero, false if it says there are none; null when unknown, not determined, or only 'below the threshold'",
+  "requirements": "the letters (A-N, as in the SF-SAC type_requirement field) of the compliance requirements the text names for this finding in a label or heading, sorted"
+ },
+ "findings": [
+  {
+   "report_id": "2022-12-GSAFAC-0000386120",
+   "ref": "2022-007",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000376092",
+   "ref": "2024-008",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "I"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000383037",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "I"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000384018",
+   "ref": "2024-004",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000380082",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "F"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000381078",
+   "ref": "2024-006",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "E"
+   }
+  },
+  {
+   "report_id": "2025-08-GSAFAC-0000395030",
+   "ref": "2025-007",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   },
+   "note": "heading gives MW to 2025-009, not this finding"
+  },
+  {
+   "report_id": "2023-06-GSAFAC-0000386203",
+   "ref": "2023-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "AB"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000380720",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2022-06-GSAFAC-0000375174",
+   "ref": "2022-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000377301",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": null,
+    "requirements": null
+   },
+   "note": "M is a HUD noncompliance code, not a requirement letter"
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000375844",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000376987",
+   "ref": "2024-008",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": true,
+    "requirements": "I"
+   }
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000391491",
+   "ref": "2025-003",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": true,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000354136",
+   "ref": "2023-006",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": true,
+    "requirements": "A"
+   },
+   "note": "code A with the name Allowable Costs (B)"
+  },
+  {
+   "report_id": "2022-06-GSAFAC-0000377157",
+   "ref": "2022-010",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000376333",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000386251",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2025-03-GSAFAC-0000378560",
+   "ref": "2025-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000382545",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "L"
+   },
+   "note": "partly a repeat"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000370550",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000374699",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000381561",
+   "ref": "2025-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": "E"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000379414",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000373937",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000375955",
+   "ref": "2024-005",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000378337",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2023-11-GSAFAC-0000376282",
+   "ref": "2022-011",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2025-03-GSAFAC-0000379848",
+   "ref": "2025-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000381878",
+   "ref": "2024-006",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "AB"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000383443",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "B"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000363990",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": true,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-10-GSAFAC-0000376935",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": null
+   },
+   "note": "title says SEFA reporting, the audit-report schedule, not the Reporting requirement"
+  },
+  {
+   "report_id": "2024-03-GSAFAC-0000372145",
+   "ref": "2024-004",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000374493",
+   "ref": "2024-004",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000379896",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": true,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000384682",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000390774",
+   "ref": "2025-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2023-06-GSAFAC-0000384501",
+   "ref": "2023-009",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "B"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000391728",
+   "ref": "2024-006",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": "E"
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000385249",
+   "ref": "2023-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": true,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000383372",
+   "ref": "2024-004",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": false,
+    "questioned_costs": true,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-09-GSAFAC-0000385027",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000381582",
+   "ref": "2023-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": true,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000378535",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000393560",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": "L"
+   },
+   "note": "plural: Significant Deficiencies"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000376244",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": true,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000388854",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000387920",
+   "ref": "2024-011",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2023-09-GSAFAC-0000381418",
+   "ref": "2023-008",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000385776",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2023-06-GSAFAC-0000057333",
+   "ref": "2023-033",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "M"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000373510",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": "I"
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000384838",
+   "ref": "2023-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2023-06-GSAFAC-0000381422",
+   "ref": "2023-045",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "FM"
+   }
+  },
+  {
+   "report_id": "2024-09-GSAFAC-0000391786",
+   "ref": "2024-036",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "F"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000382089",
+   "ref": "2024-004",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": false,
+    "questioned_costs": null,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000382619",
+   "ref": "2023-007",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": true,
+    "questioned_costs": null,
+    "requirements": "AB"
+   },
+   "note": "costs below the $25,000 threshold"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000391134",
+   "ref": "2024-004",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2024-09-GSAFAC-0000374580",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2025-04-GSAFAC-0000378181",
+   "ref": "2025-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2023-09-GSAFAC-0000379657",
+   "ref": "2023-005",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": true,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000377307",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000381128",
+   "ref": "2024-006",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000380980",
+   "ref": "2023-003",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": "E"
+   }
+  },
+  {
+   "report_id": "2023-11-GSAFAC-0000373100",
+   "ref": "2023-106",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "AB"
+   },
+   "note": "repeat read from 'Initially reported 2023' on a 2023 finding"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000368947",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": true,
+    "questioned_costs": true,
+    "requirements": null
+   },
+   "note": "title describes program income use; not named as a requirement"
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000390824",
+   "ref": "2025-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000378549",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "N"
+   }
+  },
+  {
+   "report_id": "2023-09-GSAFAC-0000395591",
+   "ref": "2023-006",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": true,
+    "requirements": "B"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000374931",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000383119",
+   "ref": "2023-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": true,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2022-12-GSAFAC-0000379473",
+   "ref": "2022-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2023-11-GSAFAC-0000385998",
+   "ref": "2023-004",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000376439",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000379746",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "I"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000381070",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000376694",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2024-09-GSAFAC-0000385016",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000373861",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000385005",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000043723",
+   "ref": "2023-001",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-09-GSAFAC-0000373393",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000386318",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-09-GSAFAC-0000384635",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000385180",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2025-07-GSAFAC-0000392179",
+   "ref": "2025-001",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-09-GSAFAC-0000388101",
+   "ref": "2024-003",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000382089",
+   "ref": "2024-005",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": false,
+    "questioned_costs": true,
+    "requirements": "AB"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000360148",
+   "ref": "2024-215",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "M"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000380231",
+   "ref": "2024-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000380535",
+   "ref": "2024-005",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": "E"
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000365003",
+   "ref": "2023-003",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": true,
+    "questioned_costs": false,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000393322",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": null,
+    "questioned_costs": null,
+    "requirements": null
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000380517",
+   "ref": "2024-004",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "CL"
+   },
+   "note": "heading names cash management and reporting; the condition also names allowable activities/costs"
+  },
+  {
+   "report_id": "2023-06-GSAFAC-0000382454",
+   "ref": "2023-013",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": true,
+    "questioned_costs": null,
+    "requirements": "L"
+   }
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000380062",
+   "ref": "2025-001",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": false,
+    "questioned_costs": null,
+    "requirements": null
+   },
+   "note": "H is a HUD noncompliance code"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000381346",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "significant_deficiency",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "E"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000388945",
+   "ref": "2024-002",
+   "stratum": "random",
+   "labels": {
+    "severity": null,
+    "repeat": false,
+    "questioned_costs": false,
+    "requirements": "C"
+   }
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000392499",
+   "ref": "2025-002",
+   "stratum": "random",
+   "labels": {
+    "severity": "material_weakness",
+    "repeat": null,
+    "questioned_costs": false,
+    "requirements": "E"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000384305",
+   "ref": "2024-003",
+   "stratum": "severity",
+   "labels": {
+    "severity": null
+   },
+   "note": "the significant deficiency named is a prior-year finding on another program"
+  },
+  {
+   "report_id": "2022-12-GSAFAC-0000378911",
+   "ref": "2022-002",
+   "stratum": "severity",
+   "labels": {
+    "severity": null
+   },
+   "note": "only the definition of a significant deficiency"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000376537",
+   "ref": "2024-001",
+   "stratum": "severity",
+   "labels": {
+    "severity": "material_weakness"
+   },
+   "note": "material weaknesses for allowable costs and matching, a significant deficiency for reporting: most severe kept"
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000392695",
+   "ref": "2025-001",
+   "stratum": "severity",
+   "labels": {
+    "severity": "significant_deficiency"
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000365433",
+   "ref": "2023-002",
+   "stratum": "severity",
+   "labels": {
+    "severity": "significant_deficiency"
+   }
+  },
+  {
+   "report_id": "2024-08-GSAFAC-0000369826",
+   "ref": "2024-001",
+   "stratum": "severity",
+   "labels": {
+    "severity": "material_weakness"
+   },
+   "note": "significant deficiency for allowable costs, material weakness for wage rates: most severe kept"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000386100",
+   "ref": "2024-001",
+   "stratum": "severity",
+   "labels": {
+    "severity": "material_weakness"
+   },
+   "note": "significant deficiency for procurement, material weakness for suspension and debarment: most severe kept"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000375706",
+   "ref": "2024-002",
+   "stratum": "severity",
+   "labels": {
+    "severity": "material_weakness"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000387471",
+   "ref": "2024-001",
+   "stratum": "severity",
+   "labels": {
+    "severity": "significant_deficiency"
+   }
+  },
+  {
+   "report_id": "2023-06-GSAFAC-0000385909",
+   "ref": "2023-001",
+   "stratum": "severity",
+   "labels": {
+    "severity": "significant_deficiency"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000384237",
+   "ref": "2024-001",
+   "stratum": "severity",
+   "labels": {
+    "severity": "significant_deficiency"
+   }
+  },
+  {
+   "report_id": "2023-06-GSAFAC-0000378763",
+   "ref": "2023-002",
+   "stratum": "severity",
+   "labels": {
+    "severity": "significant_deficiency"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000377872",
+   "ref": "2024-003",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": false
+   }
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000389130",
+   "ref": "2025-003",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": false
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000380500",
+   "ref": "2024-002",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": false
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000379661",
+   "ref": "2024-001",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": true
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000382514",
+   "ref": "2024-001",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": false
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000383023",
+   "ref": "2024-004",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": null
+   },
+   "note": "'a repeat of finding 2024-001' points to this year's financial statement finding, not a prior-year one"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000364696",
+   "ref": "2024-001",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": true
+   }
+  },
+  {
+   "report_id": "2023-06-GSAFAC-0000380603",
+   "ref": "2023-002",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": false
+   }
+  },
+  {
+   "report_id": "2024-08-GSAFAC-0000385695",
+   "ref": "2024-004",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": false
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000375864",
+   "ref": "2024-005",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": false
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000380500",
+   "ref": "2024-003",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": false
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000383844",
+   "ref": "2024-001",
+   "stratum": "repeat",
+   "labels": {
+    "repeat": true
+   },
+   "note": "says repeat of 2024-001, its own number"
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000376191",
+   "ref": "2024-008",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": false
+   }
+  },
+  {
+   "report_id": "2022-09-GSAFAC-0000375938",
+   "ref": "2022-010",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   }
+  },
+  {
+   "report_id": "2024-09-GSAFAC-0000378197",
+   "ref": "2024-002",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   }
+  },
+  {
+   "report_id": "2024-08-GSAFAC-0000385695",
+   "ref": "2024-003",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   }
+  },
+  {
+   "report_id": "2024-03-GSAFAC-0000387457",
+   "ref": "2025-003",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": false
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000379362",
+   "ref": "2024-001",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   },
+   "note": "$24,840.55, under the $25,000 reporting threshold"
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000391626",
+   "ref": "2025-001",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000387684",
+   "ref": "2024-001",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": false
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000381019",
+   "ref": "2024-002",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   }
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000387240",
+   "ref": "2025-001",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   }
+  },
+  {
+   "report_id": "2025-06-GSAFAC-0000389231",
+   "ref": "2025-004",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   }
+  },
+  {
+   "report_id": "2022-06-GSAFAC-0000358097",
+   "ref": "2022-006",
+   "stratum": "questioned_costs",
+   "labels": {
+    "questioned_costs": true
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000385766",
+   "ref": "2024-009",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "AB"
+   }
+  },
+  {
+   "report_id": "2022-09-GSAFAC-0000379925",
+   "ref": "2022-002",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "B"
+   }
+  },
+  {
+   "report_id": "2023-12-GSAFAC-0000380170",
+   "ref": "2023-003",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "B"
+   }
+  },
+  {
+   "report_id": "2021-06-GSAFAC-0000395398",
+   "ref": "2021-009",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "E"
+   },
+   "note": "one text for findings 2021-008 and 2021-009; this record is 2021-009, the eligibility finding"
+  },
+  {
+   "report_id": "2021-06-GSAFAC-0000395398",
+   "ref": "2021-007",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "E"
+   },
+   "note": "one text for findings 2021-006 and 2021-007; this record is 2021-007, the eligibility finding"
+  },
+  {
+   "report_id": "2021-06-GSAFAC-0000395398",
+   "ref": "2021-005",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "E"
+   },
+   "note": "one text for findings 2021-004 and 2021-005; this record is 2021-005, the eligibility finding"
+  },
+  {
+   "report_id": "2023-09-GSAFAC-0000374131",
+   "ref": "2023-003",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "ABE"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000375306",
+   "ref": "2024-001",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "L"
+   },
+   "note": "named Reporting, though the issue is the late audit submission"
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000385766",
+   "ref": "2024-011",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "CL"
+   }
+  },
+  {
+   "report_id": "2024-12-GSAFAC-0000381432",
+   "ref": "2024-002",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "A"
+   }
+  },
+  {
+   "report_id": "2024-06-GSAFAC-0000360148",
+   "ref": "2024-240",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "I"
+   }
+  },
+  {
+   "report_id": "2025-05-GSAFAC-0000383305",
+   "ref": "2025-004",
+   "stratum": "requirements",
+   "labels": {
+    "requirements": "AB"
+   }
+  }
+ ]
+}

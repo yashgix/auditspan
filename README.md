@@ -86,6 +86,11 @@ The FAC adds and amends records, so a later download may differ; the manifest sa
 The block below is rendered from `results/metrics.json` and `data/`; no number in it is typed by hand. Re-render it
 with `python demo.py --readme README.md --out README.md` after re-running the experiment.
 
+Read the per-field lines carefully: `9 form rows differ` counts **findings**, not rows — the findings whose filed
+form rows do not agree with each other on that field. A finding filed against several awards has several form rows;
+this number counts that finding once. It is the `form_varies` metric: a property of the form as filed, not an error of
+the text and not a count of rows.
+
 <!-- results:start -->
 Corpus: 6271 findings in 3293 reports; 8772 text rows, 21183 form rows; 151 split texts and 396 form-only findings left out; 9503 cited facts, 9503 quoted exactly.
 
@@ -129,6 +134,9 @@ Labels: labelled by Claude from the text, not by an auditor.
   known error sources for severity and requirements.
 - Questioned costs under the $25,000 reporting threshold are skipped when the text says so; a small stated amount with
   the form saying "no" is still listed, though the threshold may explain it.
+- `form_varies` counts findings, not rows: a finding filed against three awards whose flags disagree counts once. It
+  says how much the filed form wobbles on its own, so a `form rows differ` number is smaller than the number of rows
+  involved and is not evidence that the text is wrong.
 - One subset only (FAC acceptances July–December 2025). Findings within a report are correlated, hence the report-level
   bootstrap; the labelled sample's Wilson intervals treat findings as independent.
 - Proxy domain: Single Audit findings under the Uniform Guidance, not SOX.

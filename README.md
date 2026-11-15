@@ -87,7 +87,34 @@ The block below is rendered from `results/metrics.json` and `data/`; no number i
 with `python demo.py --readme README.md --out README.md` after re-running the experiment.
 
 <!-- results:start -->
-_Run `python experiment.py --out results/metrics.json`, then `python demo.py --readme README.md --out README.md`, to render the measured results here._
+Corpus: 6271 findings in 3293 reports; 8772 text rows, 21183 form rows; 151 split texts and 396 form-only findings left out; 9503 cited facts, 9503 quoted exactly.
+
+### Text versus form, per field
+- severity: 2707 covered, 2683 agree, 24 disagree (0.9% [0.5%, 1.3%]); 22 reports; 9 form rows differ.
+- repeat: 2474 covered, 2452 agree, 22 disagree (0.9% [0.5%, 1.4%]); 19 reports; 26 form rows differ.
+- questioned costs: 3474 covered, 3437 agree, 37 disagree (1.1% [0.7%, 1.5%]); 32 reports; 17 form rows differ.
+- requirements: 848 covered, 823 agree, 25 disagree (2.9% [1.7%, 4.4%]); 20 reports; 33 form rows differ.
+
+### Labelled sample
+Labels: labelled by Claude from the text, not by an auditor.
+- severity: precision 98.3% [91.0%, 99.7%] (58/59); recall 98.3% [91.0%, 99.7%] (58/59); confirmed flags 53.8% [29.1%, 76.8%] (7/13).
+- repeat: precision 97.5% [87.1%, 99.6%] (39/40); recall 79.6% [66.4%, 88.5%] (39/49); confirmed flags 84.6% [57.8%, 95.7%] (11/13).
+- questioned costs: precision 100.0% [93.4%, 100.0%] (54/54); recall 83.1% [72.2%, 90.3%] (54/65); confirmed flags 91.7% [64.6%, 98.5%] (11/12).
+- requirements: precision 92.9% [68.5%, 98.7%] (13/14); recall 26.0% [15.9%, 39.6%] (13/50); confirmed flags 76.9% [49.7%, 91.8%] (10/13).
+
+### Severity: text versus form
+| text / form | material weakness | significant deficiency | none |
+| --- | --- | --- | --- |
+| material weakness | 1243 | 5 | 2 |
+| significant deficiency | 12 | 1440 | 5 |
+
+### First confirmed disagreement per field
+| field | finding | text value | form value | quote |
+| --- | --- | --- | --- | --- |
+| severity | 2025-06-GSAFAC-0000392695 2025-001 | significant_deficiency | material_weakness | significant deficiency |
+| repeat | 2024-06-GSAFAC-0000377872 2024-003 | false | true | Repeat Finding: No |
+| questioned costs | 2024-06-GSAFAC-0000376191 2024-008 | false | true | Questioned Costs: $0 |
+| requirements | 2024-12-GSAFAC-0000381878 2024-006 | AB | B | Compliance Requirement Affected: Activities Allowed/Allowable Costs |
 <!-- results:end -->
 
 ## Limits

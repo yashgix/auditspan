@@ -30,6 +30,7 @@ findings that also carries auditor-filed flags to check the text against. Nothin
 - `findingtrace/sample.py`, `findingtrace/labels.py`, `findingtrace/stats.py` — the labelled sample, its scoring,
   Wilson intervals and a report-level bootstrap.
 - `findingtrace/run.py`, `experiment.py` — the metrics and the JSON they are written to.
+- `SPEC.md` is the v1 specification. `SPEC-v2.md` lists what version 2 changes and why.
 - `python -m findingtrace disagreements` — the main output: a CSV of disagreements, each row putting the auditor's
   own words next to what the same auditor filed.
 
@@ -40,7 +41,7 @@ Python 3.14, the standard library plus NumPy. From the repository root:
 ```
 make test        # unittest suite; tests that need data/ skip with a clear message when it is missing
 make lint        # ruff check and ruff format --check
-make experiment  # python experiment.py --out results/metrics.json
+make experiment  # writes results/metrics.json (v1) and results/metrics_v2.json (v2)
 
 python demo.py                                     # one-line summary of results/metrics.json
 python demo.py --readme README.md --out README.md  # re-render the results block below
@@ -91,8 +92,19 @@ form rows do not agree with each other on that field. A finding filed against se
 this number counts that finding once. It is the `form_varies` metric: a property of the form as filed, not an error of
 the text and not a count of rows.
 
+The corpus line counts quotes that are an exact copy of their source span. That is true by construction, since each
+quote is cut from the text by its start and end. It shows the tool never paraphrases. It does not show that each quote
+supports its fact. A severity quote is only the two words "material weakness" or "significant deficiency", so a reader
+checks the surrounding text.
+
+Version 2 changes only the requirements field (see `SPEC-v2.md`). It fixes two misreads of v1, and it stops counting
+two kinds of difference as disagreements. One kind is A versus B: "activities allowed or unallowed" and "allowable
+costs" are often tested together, and auditors file either letter. The other is a form that says P ("Other"), which the
+text cannot be checked against. The v1 numbers stay as they were, and the v1 example table shows each example's
+version 2 outcome. The version 2 lines come from `results/metrics_v2.json`.
+
 <!-- results:start -->
-Corpus: 6271 findings in 3293 reports; 8772 text rows, 21183 form rows; 151 split texts and 396 form-only findings left out; 9503 cited facts, 9503 quoted exactly.
+Corpus: 6271 findings in 3293 reports; 8772 text rows, 21183 form rows; 151 split texts and 396 form-only findings left out; 9503 cited facts, 9503 of them an exact copy of their source span (this checks the copying, not that each quote supports its fact).
 
 ### Text versus form, per field
 - severity: 2707 covered, 2683 agree, 24 disagree (0.9% [0.5%, 1.3%]); 22 reports; 9 form rows differ.
@@ -114,12 +126,23 @@ Labels: labelled by Claude from the text, not by an auditor.
 | significant deficiency | 12 | 1440 | 5 |
 
 ### First confirmed disagreement per field
+| field | finding | text value | form value | quote | v2 outcome |
+| --- | --- | --- | --- | --- | --- |
+| severity | 2025-06-GSAFAC-0000392695 2025-001 | significant_deficiency | material_weakness | significant deficiency | disagree |
+| repeat | 2024-06-GSAFAC-0000377872 2024-003 | false | true | Repeat Finding: No | disagree |
+| questioned costs | 2024-06-GSAFAC-0000376191 2024-008 | false | true | Questioned Costs: $0 | disagree |
+| requirements | 2024-12-GSAFAC-0000381878 2024-006 | AB | B | Compliance Requirement Affected: Activities Allowed/Allowable Costs | a_vs_b |
+
+### Version 2: requirements (SPEC-v2.md; the other fields are as in version 1)
+- requirements: 850 covered, 828 agree, 8 disagree (0.9% [0.2%, 1.9%]); 6 reports; 33 form rows differ.
+- requirements outcomes not counted as disagreements: 10 differ only in A versus B, 4 uncheckable (the form says P, Other).
+
+Labelled sample, version 2:
+- requirements: precision 92.9% [68.5%, 98.7%] (13/14); recall 26.0% [15.9%, 39.6%] (13/50); confirmed flags 50.0% [18.8%, 81.2%] (3/6).
+
 | field | finding | text value | form value | quote |
 | --- | --- | --- | --- | --- |
-| severity | 2025-06-GSAFAC-0000392695 2025-001 | significant_deficiency | material_weakness | significant deficiency |
-| repeat | 2024-06-GSAFAC-0000377872 2024-003 | false | true | Repeat Finding: No |
-| questioned costs | 2024-06-GSAFAC-0000376191 2024-008 | false | true | Questioned Costs: $0 |
-| requirements | 2024-12-GSAFAC-0000381878 2024-006 | AB | B | Compliance Requirement Affected: Activities Allowed/Allowable Costs |
+| requirements | 2023-09-GSAFAC-0000374131 2023-003 | AE | E | Compliance Requirement: Eligibility and Allowable Activities/Costs |
 <!-- results:end -->
 
 ## Limits
@@ -130,7 +153,8 @@ Labels: labelled by Claude from the text, not by an auditor.
   later labelled the disagreement strata. `flag_precision` is therefore not an out-of-sample measure. Only the random
   stratum is, and about 2 of its 100 findings may overlap those read during development.
 - Rules miss facts stated in unusual ways. Recall is reported per field and is low for requirements, where only
-  labelled lines are read. Multi-part findings (a different severity per part) and one text covering two findings are
+  labelled lines are read. Many findings name the requirement only in their title line, which neither version
+  reads yet. Multi-part findings (a different severity per part) and one text covering two findings are
   known error sources for severity and requirements.
 - Questioned costs under the $25,000 reporting threshold are skipped when the text says so; a small stated amount with
   the form saying "no" is still listed, though the threshold may explain it.

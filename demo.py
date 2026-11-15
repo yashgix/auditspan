@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from findingtrace import DATA_DIR
-from findingtrace.compare import agrees, compare, form_value
+from findingtrace.compare import compare, form_value, verdict
 from findingtrace.data import load
 from findingtrace.extract import FIELDS
 from findingtrace.labels import load_labels
@@ -38,68 +38,38 @@ def _interval(lo: float, hi: float) -> str:
 
 
 def _corpus_line(metrics: dict) -> str:
-    findings = metrics["findings"]
-    reports = metrics["reports"]
-    text_rows = metrics["text_rows"]
-    form_rows = metrics["form_rows"]
-    split_texts = metrics["split_texts"]
-    form_only = metrics["form_only_findings"]
-    facts = metrics["facts"]
-    quoted = metrics["facts_quoted_exactly"]
     return (
-        f"Corpus: {findings} findings in {reports} reports; "
-        f"{text_rows} text rows, {form_rows} form rows; "
-        f"{split_texts} split texts and {form_only} form-only findings left out; "
-        f"{facts} cited facts, {quoted} quoted exactly."
+        f"Corpus: {metrics['findings']} findings in {metrics['reports']} reports; "
+        f"{metrics['text_rows']} text rows, {metrics['form_rows']} form rows; "
+        f"{metrics['split_texts']} split texts and {metrics['form_only_findings']} form-only findings left out; "
+        f"{metrics['facts']} cited facts, {metrics['facts_quoted_exactly']} of them an exact copy of their source "
+        "span (this checks the copying, not that each quote supports its fact)."
     )
 
 
-def _comparison_lines(metrics: dict) -> list[str]:
-    lines = []
-    for index, field in enumerate(FIELDS):
-        covered = metrics["covered"][index]
-        agree = metrics["agree"][index]
-        disagree = metrics["disagree"][index]
-        rate = metrics["disagree_rate"][index]
-        lo = metrics["disagree_rate_lo"][index]
-        hi = metrics["disagree_rate_hi"][index]
-        reports = metrics["disagree_reports"][index]
-        varies = metrics["form_varies"][index]
-        line = (
-            f"- {FIELD_LABELS[field]}: {covered} covered, {agree} agree, {disagree} disagree "
-            f"({_pct(rate)} {_interval(lo, hi)}); {reports} reports; {varies} form rows differ."
-        )
-        lines.append(line)
-    return lines
+def _comparison_line(metrics: dict, field: str) -> str:
+    index = FIELDS.index(field)
+    rate = metrics["disagree_rate"][index]
+    interval = _interval(metrics["disagree_rate_lo"][index], metrics["disagree_rate_hi"][index])
+    return (
+        f"- {FIELD_LABELS[field]}: {metrics['covered'][index]} covered, {metrics['agree'][index]} agree, "
+        f"{metrics['disagree'][index]} disagree ({_pct(rate)} {interval}); "
+        f"{metrics['disagree_reports'][index]} reports; {metrics['form_varies'][index]} form rows differ."
+    )
 
 
-def _quality_lines(metrics: dict) -> list[str]:
-    lines = []
-    for index, field in enumerate(FIELDS):
-        precision = metrics["precision"][index]
-        precision_lo = metrics["precision_lo"][index]
-        precision_hi = metrics["precision_hi"][index]
-        correct = metrics["correct"][index]
-        extracted = metrics["extracted"][index]
-        recall = metrics["recall"][index]
-        recall_lo = metrics["recall_lo"][index]
-        recall_hi = metrics["recall_hi"][index]
-        found = metrics["found"][index]
-        stated = metrics["stated"][index]
-        flag_precision = metrics["flag_precision"][index]
-        flag_lo = metrics["flag_precision_lo"][index]
-        flag_hi = metrics["flag_precision_hi"][index]
-        confirmed = metrics["confirmed"][index]
-        flagged = metrics["flagged"][index]
-        line = (
-            f"- {FIELD_LABELS[field]}: precision {_pct(precision)} "
-            f"{_interval(precision_lo, precision_hi)} ({correct}/{extracted}); "
-            f"recall {_pct(recall)} {_interval(recall_lo, recall_hi)} ({found}/{stated}); "
-            f"confirmed flags {_pct(flag_precision)} "
-            f"{_interval(flag_lo, flag_hi)} ({confirmed}/{flagged})."
-        )
-        lines.append(line)
-    return lines
+def _score(metrics: dict, name: str, index: int, numerator: str, denominator: str) -> str:
+    interval = _interval(metrics[f"{name}_lo"][index], metrics[f"{name}_hi"][index])
+    return f"{_pct(metrics[name][index])} {interval} ({metrics[numerator][index]}/{metrics[denominator][index]})"
+
+
+def _quality_line(metrics: dict, field: str) -> str:
+    index = FIELDS.index(field)
+    return (
+        f"- {FIELD_LABELS[field]}: precision {_score(metrics, 'precision', index, 'correct', 'extracted')}; "
+        f"recall {_score(metrics, 'recall', index, 'found', 'stated')}; "
+        f"confirmed flags {_score(metrics, 'flag_precision', index, 'confirmed', 'flagged')}."
+    )
 
 
 def _severity_lines(metrics: dict) -> list[str]:
@@ -111,8 +81,7 @@ def _severity_lines(metrics: dict) -> list[str]:
     width = len(FORM_VALUES)
     for text_index, text in enumerate(SEVERITY_VALUES):
         values = [str(cells[text_index * width + form_index]) for form_index in range(width)]
-        label = text.replace("_", " ")
-        lines.append("| " + " | ".join([label, *values]) + " |")
+        lines.append("| " + " | ".join([text.replace("_", " "), *values]) + " |")
     return lines
 
 
@@ -120,72 +89,94 @@ def _cell(value: str) -> str:
     return value.replace("|", "&#124;")
 
 
-def _first_confirmed(data_dir) -> dict[str, tuple]:
-    findings = {finding.key: finding for finding in load(data_dir).findings}
+def _first_confirmed(findings: dict, rows: list[dict], fields: tuple, v2: bool) -> dict[str, tuple]:
+    """The first labels.json row per field that is flagged and whose label also contradicts the form."""
     found = {}
-    for row in load_labels(data_dir):
+    for row in rows:
         finding = findings.get((row["report_id"], row["ref"]))
         if finding is None:
             continue
-        labels = row.get("labels", {})
-        for field in FIELDS:
-            if field in found or field not in labels:
+        results = compare(finding, v2)
+        for field in fields:
+            label = row.get("labels", {}).get(field)
+            if field in found or label is None:
                 continue
-            label = labels[field]
-            fact, verdict = compare(finding)[field]
-            if verdict == "disagree" and label is not None and not agrees(field, label, finding.form):
-                found[field] = (finding, fact, label)
-        if len(found) == len(FIELDS):
-            break
+            fact, result = results[field]
+            if result == "disagree" and verdict(field, label, finding.form, v2) == "disagree":
+                found[field] = (finding, fact)
     return found
 
 
-def _disagreement_lines(data_dir) -> list[str]:
-    found = _first_confirmed(data_dir)
+def _row(field: str, finding, fact, *extra: str) -> str:
+    cells = (
+        FIELD_LABELS[field],
+        f"{finding.report_id} {finding.ref}",
+        _cell(_text(fact.value)),
+        _cell(_text(form_value(finding.form, field))),
+        _cell(" ".join(fact.quote.split())),
+        *extra,
+    )
+    return "| " + " | ".join(cells) + " |"
+
+
+def _v1_disagreement_lines(findings: dict, rows: list[dict]) -> list[str]:
+    found = _first_confirmed(findings, rows, FIELDS, v2=False)
     lines = [
-        "| field | finding | text value | form value | quote |",
-        "| --- | --- | --- | --- | --- |",
+        "| field | finding | text value | form value | quote | v2 outcome |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for field in FIELDS:
-        entry = found.get(field)
-        if entry is None:
-            lines.append(f"| {FIELD_LABELS[field]} | none | - | - | - |")
+        if field not in found:
+            lines.append(f"| {FIELD_LABELS[field]} | none | - | - | - | - |")
             continue
-        finding, fact, _label = entry
-        quote = _cell(" ".join(fact.quote.split()))
-        lines.append(
-            "| "
-            + " | ".join(
-                (
-                    FIELD_LABELS[field],
-                    f"{finding.report_id} {finding.ref}",
-                    _cell(_text(fact.value)),
-                    _cell(_text(form_value(finding.form, field))),
-                    quote,
-                )
-            )
-            + " |"
-        )
+        finding, fact = found[field]
+        lines.append(_row(field, finding, fact, compare(finding, v2=True)[field][1]))
     return lines
 
 
-def render_block(metrics: dict, data_dir=DATA_DIR) -> str:
+def _v2_lines(metrics: dict, findings: dict, rows: list[dict]) -> list[str]:
+    index = FIELDS.index("requirements")
+    lines = [
+        "### Version 2: requirements (SPEC-v2.md; the other fields are as in version 1)",
+        _comparison_line(metrics, "requirements"),
+        f"- requirements outcomes not counted as disagreements: {metrics['a_vs_b'][index]} differ only in A versus "
+        f"B, {metrics['uncheckable'][index]} uncheckable (the form says P, Other).",
+        "",
+        "Labelled sample, version 2:",
+        _quality_line(metrics, "requirements"),
+        "",
+        "| field | finding | text value | form value | quote |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    found = _first_confirmed(findings, rows, ("requirements",), v2=True)
+    if "requirements" in found:
+        lines.append(_row("requirements", *found["requirements"]))
+    else:
+        lines.append("| requirements | none | - | - | - |")
+    return lines
+
+
+def render_block(metrics: dict, data_dir=DATA_DIR, metrics_v2: dict | None = None) -> str:
+    findings = {finding.key: finding for finding in load(data_dir).findings}
+    rows = load_labels(data_dir)
     lines = [
         _corpus_line(metrics),
         "",
         "### Text versus form, per field",
-        *_comparison_lines(metrics),
+        *(_comparison_line(metrics, field) for field in FIELDS),
         "",
         "### Labelled sample",
         "Labels: labelled by Claude from the text, not by an auditor.",
-        *_quality_lines(metrics),
+        *(_quality_line(metrics, field) for field in FIELDS),
         "",
         "### Severity: text versus form",
         *_severity_lines(metrics),
         "",
         "### First confirmed disagreement per field",
-        *_disagreement_lines(data_dir),
+        *_v1_disagreement_lines(findings, rows),
     ]
+    if metrics_v2 is not None:
+        lines += ["", *_v2_lines(metrics_v2, findings, rows)]
     return chr(10).join(lines)
 
 
@@ -222,7 +213,9 @@ def main(argv=None) -> int:
     if args.out is None:
         parser.error("--out is required with --readme")
     document = Path(args.readme).read_text(encoding="utf-8")
-    block = render_block(metrics, args.data)
+    v2_path = Path(args.results) / "metrics_v2.json"
+    metrics_v2 = json.loads(v2_path.read_text(encoding="utf-8")) if v2_path.is_file() else None
+    block = render_block(metrics, args.data, metrics_v2)
     path = Path(args.out)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(replace_block(document, block), encoding="utf-8")

@@ -109,6 +109,12 @@ Requirements is the one asymmetric rule: it agrees when every letter the text na
 requirements of the award; the text names the ones this finding concerns. Naming fewer is expected and not a
 contradiction. Naming one the form does not list is.
 
+### Version 2
+`SPEC-v2.md` adds two requirements outcomes beside v1's. Text letters missing from the form only because of A versus
+B are `a_vs_b`. Missing letters on a form that lists P (Other) are `uncheckable`. Version 2 also reads the singular
+"Special Test" as N and does not read "Single Audit Reporting Package" as Reporting. v1 is unchanged, and both sets of
+metrics are written.
+
 ## 5. Two kinds of interval
 
 The experiment answers two different questions and uses an interval suited to each.

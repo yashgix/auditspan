@@ -159,8 +159,22 @@ class DemoTest(unittest.TestCase):
         self.assertIn(demo.END, text)
         self.assertIn("Corpus: 1 findings", text)
         self.assertIn("labelled by Claude from the text, not by an auditor", text)
-        self.assertIn("| severity | R1 1 | material_weakness | significant_deficiency | Material weakness |", text)
-        self.assertIn("| repeat | R1 1 | true | false | Repeat finding: Yes |", text)
+        self.assertIn(
+            "| severity | R1 1 | material_weakness | significant_deficiency | Material weakness | disagree |", text
+        )
+        self.assertIn("| repeat | R1 1 | true | false | Repeat finding: Yes | disagree |", text)
+
+    def test_v2_section_only_with_v2_metrics(self):
+        with tempfile.TemporaryDirectory() as folder:
+            data_dir = Path(folder)
+            write_data(data_dir)
+            v1 = demo.render_block(sample_metrics(), data_dir)
+            v2 = demo.render_block(sample_metrics(), data_dir, {**sample_metrics(), "a_vs_b": [0, 0, 0, 2],
+                                                                "uncheckable": [0, 0, 0, 1]})  # fmt: skip
+        self.assertNotIn("Version 2", v1)
+        self.assertIn("### Version 2: requirements", v2)
+        self.assertIn("2 differ only in A versus B, 1 uncheckable", v2)
+        self.assertIn("not that each quote supports its fact", v1)
 
 
 if __name__ == "__main__":

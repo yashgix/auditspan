@@ -106,7 +106,7 @@ def summarize(corpus: Corpus, rows) -> dict:
         metrics[name] = [_round6(value[0]) for value in intervals]
         metrics[f"{name}_lo"] = [_round6(value[1]) for value in intervals]
         metrics[f"{name}_hi"] = [_round6(value[2]) for value in intervals]
-    metrics["severity_text_vs_form"] = {cell: int(severity_counts[cell]) for cell in SEVERITY_CELLS}
+    metrics["severity_text_vs_form"] = [int(severity_counts[cell]) for cell in SEVERITY_CELLS]
     return metrics
 
 

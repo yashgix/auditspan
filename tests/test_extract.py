@@ -1,6 +1,7 @@
 """Tests for findingtrace.extract."""
 
 import unittest
+from dataclasses import FrozenInstanceError
 
 from findingtrace import DATA_DIR
 from findingtrace.data import load
@@ -15,6 +16,13 @@ from findingtrace.extract import (
     requirements,
     severity,
 )
+
+
+class FactTest(unittest.TestCase):
+    def test_frozen(self):
+        fact = Fact("severity", "material_weakness", 0, 1, "M")
+        with self.assertRaises(FrozenInstanceError):
+            fact.value = "significant_deficiency"
 
 
 class FactTestCase(unittest.TestCase):
@@ -105,8 +113,12 @@ class RepeatTest(FactTestCase):
         self.assertEqual(fact.quote, "not a repeat finding")
         self.assert_quote(not_repeat_text, fact)
 
-    def test_unresolved_label_falls_back_to_sentence(self):
+    def test_unresolved_label_is_skipped(self):
         text = "Repeat finding: of 2022-007."
+        self.assertIsNone(repeat(text))
+
+    def test_sentence_fallback_keeps_exact_span(self):
+        text = "Repeat finding of 2022-007."
         fact = repeat(text)
         self.assertIs(fact.value, True)
         self.assertEqual(fact.quote, "Repeat finding of 2022-007")

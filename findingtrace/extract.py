@@ -23,11 +23,11 @@ LETTERS = {
     "M": r"subrecipient monitoring",
     "N": r"special tests",
 }
-TAIL = r"[^\S\n]*[:\u2013\u2014-]?[^\S\n]*(?P<value>[^\n]*)"
+TAIL = r"[^\S\n]*[:–—-]?[^\S\n]*(?P<value>[^\n]*)"
 NEXT_LINE = r"\n\s*(\S[^\n]*)"
 SEVERITY = r"\b(?:material weakness|significant deficiency)\b"
 BEFORE = [
-    r"(?:\[\s*\]|\u2610|\u25a1)\s*$",
+    r"(?:\[\s*\]|☐|□)\s*$",
     r"\b(?:not|no|nor)\b[^.\n]{0,30}$",
     r"(?:\bor|and/or)\s+(?:an?\s+)?$",
 ]
@@ -37,7 +37,7 @@ AFTER = [
     r"^[^.\n]{0,40}\bover financial reporting\b",
 ]
 REPEAT_LABEL = (
-    r"^[^\S\n]*(?:identification (?:as|of)[^:\n\u2013]*?repeat[^:\n\u2013]*(?=[: \u2013])"
+    r"^[^\S\n]*(?:identification (?:as|of)[^:\n–]*?repeat[^:\n–]*(?=[:–])"
     r"|repeat finding(?: from (?:the )?prior (?:year\(s\)|years?|audits?))?\??"
     r"|prior[- ]year finding(?: number)?)"
     + TAIL
@@ -58,7 +58,7 @@ REQUIREMENT_LABEL = (
     r"^[^\S\n]*(?:type of )?compliance requirements?(?: affected| type)?(?:\(s\))?"
     + TAIL
 )
-DASH = r"\s[\u2013\u2014-]\s"
+DASH = r"\s[–—-]\s"
 
 _NEXT_LINE = re.compile(NEXT_LINE)
 

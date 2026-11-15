@@ -108,8 +108,9 @@ def _severity_lines(metrics: dict) -> list[str]:
         '| text / form | material weakness | significant deficiency | none |',
         '| --- | --- | --- | --- |',
     ]
-    for text in SEVERITY_VALUES:
-        values = [str(cells.get(f'{text}__{form}', 0)) for form in FORM_VALUES]
+    width = len(FORM_VALUES)
+    for text_index, text in enumerate(SEVERITY_VALUES):
+        values = [str(cells[text_index * width + form_index]) for form_index in range(width)]
         label = text.replace('_', ' ')
         lines.append('| ' + ' | '.join([label, *values]) + ' |')
     return lines

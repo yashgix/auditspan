@@ -100,14 +100,7 @@ def sample_metrics() -> dict:
         'flag_precision': [1.0, 1.0, 1.0, 1.0],
         'flag_precision_lo': [0.1, 0.1, 0.1, 0.1],
         'flag_precision_hi': [1.0, 1.0, 1.0, 1.0],
-        'severity_text_vs_form': {
-            'material_weakness__material_weakness': 1,
-            'material_weakness__significant_deficiency': 0,
-            'material_weakness__none': 0,
-            'significant_deficiency__material_weakness': 0,
-            'significant_deficiency__significant_deficiency': 0,
-            'significant_deficiency__none': 0,
-        },
+        'severity_text_vs_form': [1, 0, 0, 0, 0, 0],
     }
 
 

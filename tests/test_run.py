@@ -133,8 +133,10 @@ class SummarizeTest(unittest.TestCase):
         self.assertEqual(metrics["confirmed"], [1, 0, 0, 0])
         self.assertEqual(metrics["precision"][0], 0.5)
         self.assertEqual(metrics["precision"][1], 1.0)
-        self.assertEqual(metrics["severity_text_vs_form"]["material_weakness__material_weakness"], 2)
-        self.assertEqual(metrics["severity_text_vs_form"]["material_weakness__none"], 1)
+        self.assertEqual(len(metrics["severity_text_vs_form"]), 6)
+        self.assertTrue(all(isinstance(value, int) for value in metrics["severity_text_vs_form"]))
+        self.assertEqual(metrics["severity_text_vs_form"][0], 2)
+        self.assertEqual(metrics["severity_text_vs_form"][2], 1)
 
 
 @unittest.skipUnless(

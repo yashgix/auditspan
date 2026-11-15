@@ -6,8 +6,8 @@ from, and its error rate is reported with intervals rather than claimed.
 ## The question
 
 A US organisation that spends $750,000 or more of federal awards in a fiscal year must obtain a Single Audit
-($1,000,000 for fiscal years beginning on or after 1 October 2024; 2 CFR 200.501 — most audits in this dataset cover
-earlier fiscal years). For each finding the auditor writes free text — condition, criteria, cause, effect, questioned
+($1,000,000 for fiscal years beginning on or after 1 October 2024, 2 CFR 200.501. Most audits in this dataset cover
+earlier fiscal years.) For each finding the auditor writes free text — condition, criteria, cause, effect, questioned
 costs — and files the same finding as structured flags on form SF-SAC: material weakness or significant deficiency, a
 repeat finding, questioned costs, and the compliance requirement concerned. The text and the form are written by the
 same auditor about the same finding, so they should agree.
@@ -19,13 +19,13 @@ value side by side. Accuracy is measured on a labelled sample, not asserted.
 ## This is a stand-in, not SOX
 
 These are government Single Audits under the Uniform Guidance (2 CFR 200, Subpart F), not Sarbanes-Oxley audits of
-public companies. SOX evidence is private; the Federal Audit Clearinghouse is a large public corpus of real control
+public companies. SOX evidence is private. The Federal Audit Clearinghouse is a large public corpus of real control
 findings that also carries auditor-filed flags to check the text against. Nothing here is claimed about how any company builds audit tooling.
 
 ## What is here
 
 - `findingtrace/extract.py` — rule-based extraction of the four facts, each with an exact span.
-- `findingtrace/compare.py` — text value versus form value per finding; outcome `silent`, `agree` or `disagree`.
+- `findingtrace/compare.py` — text value versus form value per finding, with outcome `silent`, `agree` or `disagree`.
 - `findingtrace/data.py` — loads the pinned CSVs and aggregates the per-award form rows into one form per finding.
 - `findingtrace/sample.py`, `findingtrace/labels.py`, `findingtrace/stats.py` — the labelled sample, its scoring,
   Wilson intervals and a report-level bootstrap.
@@ -39,7 +39,7 @@ findings that also carries auditor-filed flags to check the text against. Nothin
 Python 3.14, the standard library plus NumPy. From the repository root:
 
 ```
-make test        # unittest suite; tests that need data/ skip with a clear message when it is missing
+make test        # own and v1 acceptance tests. Tests that need data/ skip with a clear message when it is missing
 make lint        # ruff check and ruff format --check
 make experiment  # writes results/metrics.json (v1) and results/metrics_v2.json (v2)
 
@@ -70,26 +70,26 @@ form_value, start, end, quote`, findings in load order and fields in the fixed o
 `data/MANIFEST.json` records the sha256 and size of all three files, and `data/LICENSE-FAC.md` quotes the terms.
 
 The FAC states: "The data collected by the FAC is free to use and in the public domain" (fac.gov/data, read
-2026-11-14). The FAC is run by the U.S. General Services Administration; the findings are written by independent
+2026-11-14). The FAC is run by the U.S. General Services Administration. The findings are written by independent
 auditors in Single Audit reports, not in SOX audits.
 
 To rebuild or check the pinned files:
 
 ```
-python tools/fetch_data.py --verify   # checks the files against MANIFEST.json; no network
-python tools/fetch_data.py            # re-downloads from the FAC and rebuilds the subset; needs network and writes data/
+python tools/fetch_data.py --verify   # checks the files against MANIFEST.json, no network
+python tools/fetch_data.py            # re-downloads from the FAC and rebuilds the subset (needs network, writes data/)
 ```
 
-The FAC adds and amends records, so a later download may differ; the manifest says when this snapshot was taken.
+The FAC adds and amends records, so a later download may differ. The manifest says when this snapshot was taken.
 
 ## Results
 
-The block below is rendered from `results/metrics.json` and `data/`; no number in it is typed by hand. Re-render it
+The block below is rendered from `results/metrics.json`, `results/metrics_v2.json` and `data/`. No number in it is typed by hand. Re-render it
 with `python demo.py --readme README.md --out README.md` after re-running the experiment.
 
 Read the per-field lines carefully: `9 form rows differ` counts **findings**, not rows — the findings whose filed
-form rows do not agree with each other on that field. A finding filed against several awards has several form rows;
-this number counts that finding once. It is the `form_varies` metric: a property of the form as filed, not an error of
+form rows do not agree with each other on that field. A finding filed against several awards has several form rows.
+This number counts that finding once. It is the `form_varies` metric: a property of the form as filed, not an error of
 the text and not a count of rows.
 
 The corpus line counts quotes that are an exact copy of their source span. That is true by construction, since each
@@ -105,20 +105,20 @@ text cannot be checked against. The v1 numbers stay as they were, and the v1 exa
 version 2 outcome. The version 2 lines come from `results/metrics_v2.json`.
 
 <!-- results:start -->
-Corpus: 6271 findings in 3293 reports; 8772 text rows, 21183 form rows; 151 split texts and 396 form-only findings left out; 9503 cited facts, 9503 of them an exact copy of their source span (this checks the copying, not that each quote supports its fact).
+Corpus: 6271 findings in 3293 reports, from 8772 text rows and 21183 form rows. 151 split texts and 396 form-only findings are left out. Cited facts: 9503, of which 9503 are an exact copy of their source span (this checks the copying, not that each quote supports its fact).
 
 ### Text versus form, per field
-- severity: 2707 covered, 2683 agree, 24 disagree (0.9% [0.5%, 1.3%]); 22 reports; 9 form rows differ.
-- repeat: 2474 covered, 2452 agree, 22 disagree (0.9% [0.5%, 1.4%]); 19 reports; 26 form rows differ.
-- questioned costs: 3474 covered, 3437 agree, 37 disagree (1.1% [0.7%, 1.5%]); 32 reports; 17 form rows differ.
-- requirements: 848 covered, 823 agree, 25 disagree (2.9% [1.7%, 4.4%]); 20 reports; 33 form rows differ.
+- severity: 2707 covered, 2683 agree, 24 disagree (0.9% [0.5%, 1.3%]) in 22 reports, 9 form rows differ.
+- repeat: 2474 covered, 2452 agree, 22 disagree (0.9% [0.5%, 1.4%]) in 19 reports, 26 form rows differ.
+- questioned costs: 3474 covered, 3437 agree, 37 disagree (1.1% [0.7%, 1.5%]) in 32 reports, 17 form rows differ.
+- requirements: 848 covered, 823 agree, 25 disagree (2.9% [1.7%, 4.4%]) in 20 reports, 33 form rows differ.
 
 ### Labelled sample
 Labels: labelled by Claude from the text, not by an auditor.
-- severity: precision 98.3% [91.0%, 99.7%] (58/59); recall 98.3% [91.0%, 99.7%] (58/59); confirmed flags 53.8% [29.1%, 76.8%] (7/13).
-- repeat: precision 97.5% [87.1%, 99.6%] (39/40); recall 79.6% [66.4%, 88.5%] (39/49); confirmed flags 84.6% [57.8%, 95.7%] (11/13).
-- questioned costs: precision 100.0% [93.4%, 100.0%] (54/54); recall 83.1% [72.2%, 90.3%] (54/65); confirmed flags 91.7% [64.6%, 98.5%] (11/12).
-- requirements: precision 92.9% [68.5%, 98.7%] (13/14); recall 26.0% [15.9%, 39.6%] (13/50); confirmed flags 76.9% [49.7%, 91.8%] (10/13).
+- severity: precision 98.3% [91.0%, 99.7%] (58/59), recall 98.3% [91.0%, 99.7%] (58/59), confirmed flags 53.8% [29.1%, 76.8%] (7/13).
+- repeat: precision 97.5% [87.1%, 99.6%] (39/40), recall 79.6% [66.4%, 88.5%] (39/49), confirmed flags 84.6% [57.8%, 95.7%] (11/13).
+- questioned costs: precision 100.0% [93.4%, 100.0%] (54/54), recall 83.1% [72.2%, 90.3%] (54/65), confirmed flags 91.7% [64.6%, 98.5%] (11/12).
+- requirements: precision 92.9% [68.5%, 98.7%] (13/14), recall 26.0% [15.9%, 39.6%] (13/50), confirmed flags 76.9% [49.7%, 91.8%] (10/13).
 
 ### Severity: text versus form
 | text / form | material weakness | significant deficiency | none |
@@ -134,12 +134,12 @@ Labels: labelled by Claude from the text, not by an auditor.
 | questioned costs | 2024-06-GSAFAC-0000376191 2024-008 | false | true | Questioned Costs: $0 | disagree |
 | requirements | 2024-12-GSAFAC-0000381878 2024-006 | AB | B | Compliance Requirement Affected: Activities Allowed/Allowable Costs | a_vs_b |
 
-### Version 2: requirements (SPEC-v2.md; the other fields are as in version 1)
-- requirements: 2502 covered, 2307 agree, 94 disagree (3.8% [2.9%, 4.7%]); 82 reports; 33 form rows differ.
+### Version 2: requirements (SPEC-v2.md, the other fields are as in version 1)
+- requirements: 2502 covered, 2307 agree, 94 disagree (3.8% [2.9%, 4.7%]) in 82 reports, 33 form rows differ.
 - requirements outcomes not counted as disagreements: 53 differ only in A versus B, 48 uncheckable (the form says P, Other).
 
 Labelled sample, version 2. The version 2 rules were written while reading this sample, so these scores are in-sample, not a measure on new findings:
-- requirements: precision 95.9% [86.3%, 98.9%] (47/49); recall 94.0% [83.8%, 97.9%] (47/50); confirmed flags 50.0% [18.8%, 81.2%] (3/6).
+- requirements: precision 95.9% [86.3%, 98.9%] (47/49), recall 94.0% [83.8%, 97.9%] (47/50), confirmed flags 50.0% [18.8%, 81.2%] (3/6).
 
 | field | finding | text value | form value | quote |
 | --- | --- | --- | --- | --- |
@@ -149,21 +149,22 @@ Labelled sample, version 2. The version 2 rules were written while reading this 
 ## Limits
 
 - Labels are by one AI labeller (Claude) from the text alone, not by an auditor, and were not double-checked by a
-  person. A disagreement means the text and the form differ; it does not say which one is wrong.
+  person. A disagreement means the text and the form differ. It does not say which one is wrong.
 - The rules were tuned while reading about 80 flagged disagreements with form values visible, in the same session that
   later labelled the disagreement strata. `flag_precision` is therefore not an out-of-sample measure. Only the random
   stratum is, and about 2 of its 100 findings may overlap those read during development.
 - Rules miss facts stated in unusual ways. Recall is reported per field and is low for requirements, where only
-  labelled lines are read. Version 2 also reads title lines, but its rules were written while reading the
-  random labelled sample, so its scores there are in-sample until a fresh blind sample is scored. Multi-part findings (a different severity per part) and one text covering two findings are
-  known error sources for severity and requirements.
-- Questioned costs under the $25,000 reporting threshold are skipped when the text says so; a small stated amount with
+  labelled lines are read. Version 2 also reads title lines, but its rules were written while reading the random
+  labelled sample, so its scores there are in-sample until a fresh blind sample is scored. Multi-part findings (a
+  different severity per part) and one text covering two findings are known error sources for severity and
+  requirements.
+- Questioned costs under the $25,000 reporting threshold are skipped when the text says so. A small stated amount with
   the form saying "no" is still listed, though the threshold may explain it.
 - `form_varies` counts findings, not rows: a finding filed against three awards whose flags disagree counts once. It
   says how much the filed form wobbles on its own, so a `form rows differ` number is smaller than the number of rows
   involved and is not evidence that the text is wrong.
 - One subset only (FAC acceptances July–December 2025). Findings within a report are correlated, hence the report-level
-  bootstrap; the labelled sample's Wilson intervals treat findings as independent.
+  bootstrap. The labelled sample's Wilson intervals treat findings as independent.
 - Proxy domain: Single Audit findings under the Uniform Guidance, not SOX.
 
 ## Layout

@@ -39,11 +39,11 @@ def _interval(lo: float, hi: float) -> str:
 
 def _corpus_line(metrics: dict) -> str:
     return (
-        f"Corpus: {metrics['findings']} findings in {metrics['reports']} reports; "
-        f"{metrics['text_rows']} text rows, {metrics['form_rows']} form rows; "
-        f"{metrics['split_texts']} split texts and {metrics['form_only_findings']} form-only findings left out; "
-        f"{metrics['facts']} cited facts, {metrics['facts_quoted_exactly']} of them an exact copy of their source "
-        "span (this checks the copying, not that each quote supports its fact)."
+        f"Corpus: {metrics['findings']} findings in {metrics['reports']} reports, from "
+        f"{metrics['text_rows']} text rows and {metrics['form_rows']} form rows. "
+        f"{metrics['split_texts']} split texts and {metrics['form_only_findings']} form-only findings are left out. "
+        f"Cited facts: {metrics['facts']}, of which {metrics['facts_quoted_exactly']} are an exact copy of their "
+        "source span (this checks the copying, not that each quote supports its fact)."
     )
 
 
@@ -53,8 +53,8 @@ def _comparison_line(metrics: dict, field: str) -> str:
     interval = _interval(metrics["disagree_rate_lo"][index], metrics["disagree_rate_hi"][index])
     return (
         f"- {FIELD_LABELS[field]}: {metrics['covered'][index]} covered, {metrics['agree'][index]} agree, "
-        f"{metrics['disagree'][index]} disagree ({_pct(rate)} {interval}); "
-        f"{metrics['disagree_reports'][index]} reports; {metrics['form_varies'][index]} form rows differ."
+        f"{metrics['disagree'][index]} disagree ({_pct(rate)} {interval}) in "
+        f"{metrics['disagree_reports'][index]} reports, {metrics['form_varies'][index]} form rows differ."
     )
 
 
@@ -66,8 +66,8 @@ def _score(metrics: dict, name: str, index: int, numerator: str, denominator: st
 def _quality_line(metrics: dict, field: str) -> str:
     index = FIELDS.index(field)
     return (
-        f"- {FIELD_LABELS[field]}: precision {_score(metrics, 'precision', index, 'correct', 'extracted')}; "
-        f"recall {_score(metrics, 'recall', index, 'found', 'stated')}; "
+        f"- {FIELD_LABELS[field]}: precision {_score(metrics, 'precision', index, 'correct', 'extracted')}, "
+        f"recall {_score(metrics, 'recall', index, 'found', 'stated')}, "
         f"confirmed flags {_score(metrics, 'flag_precision', index, 'confirmed', 'flagged')}."
     )
 
@@ -137,7 +137,7 @@ def _v1_disagreement_lines(findings: dict, rows: list[dict]) -> list[str]:
 def _v2_lines(metrics: dict, findings: dict, rows: list[dict]) -> list[str]:
     index = FIELDS.index("requirements")
     lines = [
-        "### Version 2: requirements (SPEC-v2.md; the other fields are as in version 1)",
+        "### Version 2: requirements (SPEC-v2.md, the other fields are as in version 1)",
         _comparison_line(metrics, "requirements"),
         f"- requirements outcomes not counted as disagreements: {metrics['a_vs_b'][index]} differ only in A versus "
         f"B, {metrics['uncheckable'][index]} uncheckable (the form says P, Other).",
@@ -197,7 +197,7 @@ def _summary(metrics: dict) -> str:
     reports = metrics["reports"]
     facts = metrics["facts"]
     disagreements = metrics["disagree"][0]
-    return f"{findings} findings across {reports} reports; {facts} cited facts; {disagreements} severity disagreements."
+    return f"{findings} findings across {reports} reports, {facts} cited facts, {disagreements} severity disagreements."
 
 
 def main(argv=None) -> int:

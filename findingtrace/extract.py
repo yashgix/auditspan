@@ -23,6 +23,8 @@ LETTERS = {
     "M": r"subrecipient monitoring",
     "N": r"special tests",
 }
+# SPEC-v2: singular "special test", and the Single Audit "reporting package" is not the Reporting requirement.
+LETTERS_V2 = {**LETTERS, "L": r"reporting(?! package)", "N": r"special tests?"}
 TAIL = r"[^\S\n]*[:–—-]?[^\S\n]*(?P<value>[^\n]*)"
 NEXT_LINE = r"\n\s*(\S[^\n]*)"
 SEVERITY = r"\b(?:material weakness|significant deficiency)\b"
@@ -126,26 +128,26 @@ def questioned_costs(text: str) -> Fact | None:
     return None
 
 
-def requirement_letters(value: str) -> str:
+def requirement_letters(value: str, letters: dict[str, str] = LETTERS) -> str:
     for part in re.split(DASH, value):
-        letters = "".join(letter for letter, pattern in LETTERS.items() if re.search(pattern, part, CASE))
-        if letters:
-            return letters
+        found = "".join(letter for letter, pattern in letters.items() if re.search(pattern, part, CASE))
+        if found:
+            return found
     return ""
 
 
-def requirements(text: str) -> Fact | None:
+def requirements(text: str, letters: dict[str, str] = LETTERS) -> Fact | None:
     for value, start, end in _labelled_values(REQUIREMENT_LABEL, text):
-        letters = requirement_letters(value)
-        if letters:
-            return Fact("requirements", letters, start, end, text[start:end])
+        found = requirement_letters(value, letters)
+        if found:
+            return Fact("requirements", found, start, end, text[start:end])
     return None
 
 
-def extract(text: str) -> dict[str, Fact | None]:
+def extract(text: str, letters: dict[str, str] = LETTERS) -> dict[str, Fact | None]:
     return {
         "severity": severity(text),
         "repeat": repeat(text),
         "questioned_costs": questioned_costs(text),
-        "requirements": requirements(text),
+        "requirements": requirements(text, letters),
     }

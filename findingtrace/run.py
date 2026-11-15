@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 
 from . import DATA_DIR
-from .compare import FORM_COLUMNS, compare, form_value
+from .compare import FORM_COLUMNS, OUTCOMES, OUTCOMES_V2, compare, form_value
 from .data import Corpus, load
 from .extract import FIELDS
 from .labels import evaluate, load_labels
@@ -35,8 +35,8 @@ def _rate(part: int, whole: int) -> float:
     return part / whole if whole else 0.0
 
 
-def summarize(corpus: Corpus, rows) -> dict:
-    """Compute all experiment metrics for one corpus and label set."""
+def summarize(corpus: Corpus, rows, v2: bool = False) -> dict:
+    """Compute all experiment metrics for one corpus and label set (v2 adds the SPEC-v2 outcome counts)."""
     rows = tuple(rows)
     findings = corpus.findings
     report_ids = sorted({finding.report_id for finding in findings})
@@ -47,12 +47,13 @@ def summarize(corpus: Corpus, rows) -> dict:
     agree = [0] * len(FIELDS)
     disagree = [0] * len(FIELDS)
     form_varies = [0] * len(FIELDS)
+    other = {name: [0] * len(FIELDS) for name in OUTCOMES_V2 if name not in OUTCOMES}
     severity_counts = dict.fromkeys(SEVERITY_CELLS, 0)
     facts = 0
     quoted = 0
 
     for finding in findings:
-        results = compare(finding)
+        results = compare(finding, v2)
         row = report_index[finding.report_id]
         for column, field in enumerate(FIELDS):
             fact, verdict = results[field]
@@ -67,6 +68,8 @@ def summarize(corpus: Corpus, rows) -> dict:
             elif verdict == "disagree":
                 disagree[column] += 1
                 disagree_matrix[row, column] += 1
+            elif verdict in other:
+                other[verdict][column] += 1
             if any(name in finding.form.varies for name in FORM_COLUMNS[field]):
                 form_varies[column] += 1
         severity_fact = results["severity"][0]
@@ -98,7 +101,10 @@ def summarize(corpus: Corpus, rows) -> dict:
         "form_varies": [int(value) for value in form_varies],
     }
 
-    evaluation = evaluate(findings, rows)
+    if v2:
+        metrics.update(other)
+
+    evaluation = evaluate(findings, rows, v2)
     for count in _EVALUATE_COUNTS:
         metrics[count] = [int(evaluation[field][count]) for field in FIELDS]
     for name, numerator, denominator in _QUALITY:
@@ -110,9 +116,9 @@ def summarize(corpus: Corpus, rows) -> dict:
     return metrics
 
 
-def main(data_dir=DATA_DIR, out="results/metrics.json") -> dict:
+def main(data_dir=DATA_DIR, out="results/metrics.json", v2: bool = False) -> dict:
     """Load the pinned data, compute the metrics, and write them as JSON."""
-    metrics = summarize(load(data_dir), load_labels(data_dir))
+    metrics = summarize(load(data_dir), load_labels(data_dir), v2)
     path = Path(out)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(metrics, sort_keys=True, indent=1) + "\n", encoding="utf-8")

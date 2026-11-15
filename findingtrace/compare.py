@@ -1,9 +1,11 @@
 """Compare extracted facts with the auditor-filed SF-SAC flags."""
 
 from .data import Finding, Form
-from .extract import FIELDS, Fact, extract
+from .extract import FIELDS, LETTERS, LETTERS_V2, Fact, extract
 
 OUTCOMES = ("silent", "agree", "disagree")
+OUTCOMES_V2 = (*OUTCOMES, "a_vs_b", "uncheckable")
+AB = {"A", "B"}
 
 FORM_COLUMNS = {
     "severity": ("is_material_weakness", "is_significant_deficiency"),
@@ -35,12 +37,31 @@ def agrees(field: str, value: str | bool, form: Form) -> bool:
     return value == form_value(form, field)
 
 
-def outcome(fact: Fact | None, form: Form) -> str:
+def requirements_verdict(value: str, form: Form) -> str:
+    """SPEC-v2: letters the form lacks are not a disagreement when they are only A versus B, or the form says P."""
+    filed = set(form.requirements)
+    extra = set(value) - filed
+    if not extra:
+        return "agree"
+    if extra <= AB and filed & AB:
+        return "a_vs_b"
+    if "P" in filed:
+        return "uncheckable"
+    return "disagree"
+
+
+def verdict(field: str, value: str | bool, form: Form, v2: bool = False) -> str:
+    if v2 and field == "requirements":
+        return requirements_verdict(value, form)
+    return "agree" if agrees(field, value, form) else "disagree"
+
+
+def outcome(fact: Fact | None, form: Form, v2: bool = False) -> str:
     if fact is None:
         return "silent"
-    return "agree" if agrees(fact.field, fact.value, form) else "disagree"
+    return verdict(fact.field, fact.value, form, v2)
 
 
-def compare(finding: Finding) -> dict[str, tuple[Fact | None, str]]:
-    facts = extract(finding.text)
-    return {field: (facts[field], outcome(facts[field], finding.form)) for field in FIELDS}
+def compare(finding: Finding, v2: bool = False) -> dict[str, tuple[Fact | None, str]]:
+    facts = extract(finding.text, LETTERS_V2 if v2 else LETTERS)
+    return {field: (facts[field], outcome(facts[field], finding.form, v2)) for field in FIELDS}

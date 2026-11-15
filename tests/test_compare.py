@@ -2,7 +2,16 @@
 
 import unittest
 
-from findingtrace.compare import FORM_COLUMNS, OUTCOMES, agrees, compare, form_value, outcome
+from findingtrace.compare import (
+    FORM_COLUMNS,
+    OUTCOMES,
+    OUTCOMES_V2,
+    agrees,
+    compare,
+    form_value,
+    outcome,
+    requirements_verdict,
+)
 from findingtrace.data import Finding, Form
 from findingtrace.extract import FIELDS, Fact
 
@@ -73,6 +82,35 @@ class OutcomeTest(unittest.TestCase):
         form = make_form(requirements="AB")
         self.assertEqual(outcome(make_fact("requirements", "A"), form), "agree")
         self.assertEqual(outcome(make_fact("requirements", "AC"), form), "disagree")
+
+
+class RequirementsVerdictTest(unittest.TestCase):
+    def test_categories(self):
+        cases = [
+            ("A", "AB", "agree"),
+            ("AB", "B", "a_vs_b"),
+            ("B", "AE", "a_vs_b"),
+            ("AB", "E", "disagree"),
+            ("L", "P", "uncheckable"),
+            ("AB", "BP", "a_vs_b"),
+            ("N", "EL", "disagree"),
+        ]
+        for value, filed, expected in cases:
+            with self.subTest(value=value, filed=filed):
+                self.assertEqual(requirements_verdict(value, make_form(requirements=filed)), expected)
+
+    def test_v2_changes_only_requirements(self):
+        form = make_form(significant=True, requirements="B")
+        self.assertEqual(outcome(make_fact("requirements", "AB"), form), "disagree")
+        self.assertEqual(outcome(make_fact("requirements", "AB"), form, v2=True), "a_vs_b")
+        self.assertEqual(outcome(make_fact("severity", "material_weakness"), form, v2=True), "disagree")
+
+    def test_compare_v2_uses_v2_letters(self):
+        text = "Compliance Requirement: Data Collection Form and Single Audit Reporting Package"
+        finding = Finding("R", "1", 2024, text, make_form(requirements="N"))
+        self.assertEqual(compare(finding)["requirements"][1], "disagree")
+        self.assertEqual(compare(finding, v2=True)["requirements"], (None, "silent"))
+        self.assertEqual(OUTCOMES_V2, ("silent", "agree", "disagree", "a_vs_b", "uncheckable"))
 
 
 class CompareTest(unittest.TestCase):

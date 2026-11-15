@@ -35,8 +35,8 @@ def _rate(part: int, whole: int) -> float:
     return part / whole if whole else 0.0
 
 
-def summarize(corpus: Corpus, rows, v2: bool = False) -> dict:
-    """Compute all experiment metrics for one corpus and label set (v2 adds the SPEC-v2 outcome counts)."""
+def summarize(corpus: Corpus, rows, version: str = "v1") -> dict:
+    """Compute all experiment metrics for one corpus and label set (v2 and later add the SPEC-v2 outcome counts)."""
     rows = tuple(rows)
     findings = corpus.findings
     report_ids = sorted({finding.report_id for finding in findings})
@@ -53,7 +53,7 @@ def summarize(corpus: Corpus, rows, v2: bool = False) -> dict:
     quoted = 0
 
     for finding in findings:
-        results = compare(finding, v2)
+        results = compare(finding, version)
         row = report_index[finding.report_id]
         for column, field in enumerate(FIELDS):
             fact, verdict = results[field]
@@ -101,10 +101,10 @@ def summarize(corpus: Corpus, rows, v2: bool = False) -> dict:
         "form_varies": [int(value) for value in form_varies],
     }
 
-    if v2:
+    if version != "v1":
         metrics.update(other)
 
-    evaluation = evaluate(findings, rows, v2)
+    evaluation = evaluate(findings, rows, version)
     for count in _EVALUATE_COUNTS:
         metrics[count] = [int(evaluation[field][count]) for field in FIELDS]
     for name, numerator, denominator in _QUALITY:
@@ -123,11 +123,12 @@ def _write(metrics: dict, out) -> dict:
     return metrics
 
 
-def main(data_dir=DATA_DIR, out="results/metrics.json", v2: bool = False) -> dict:
+def main(data_dir=DATA_DIR, out="results/metrics.json", version: str = "v1") -> dict:
     """Load the pinned data, compute the metrics, and write them as JSON."""
-    return _write(summarize(load(data_dir), load_labels(data_dir), v2), out)
+    return _write(summarize(load(data_dir), load_labels(data_dir), version), out)
 
 
 def main_heldout(data_dir=DATA_DIR, heldout_dir=heldout.HELDOUT_DIR, out="results/heldout.json") -> dict:
-    """Score v1 and v2 requirements on the blind hold-out and write them as JSON."""
-    return _write(heldout.score(load(data_dir).findings, heldout.load_heldout(heldout_dir)), out)
+    """Score each version's requirements on the blind hold-out and write them as JSON."""
+    labels, dev_ids = heldout.load_heldout(heldout_dir), heldout.load_dev_ids(heldout_dir)
+    return _write(heldout.score(load(data_dir).findings, labels, dev_ids), out)

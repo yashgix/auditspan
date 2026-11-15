@@ -3,6 +3,7 @@
 from .data import Finding, Form
 from .extract import FIELDS, Fact, extract
 from .requirements_v2 import requirements_v2
+from .rules_v2_1 import extract_v2_1
 
 OUTCOMES = ("silent", "agree", "disagree")
 OUTCOMES_V2 = (*OUTCOMES, "a_vs_b", "uncheckable")
@@ -51,20 +52,26 @@ def requirements_verdict(value: str, form: Form) -> str:
     return "disagree"
 
 
-def verdict(field: str, value: str | bool, form: Form, v2: bool = False) -> str:
-    if v2 and field == "requirements":
+def verdict(field: str, value: str | bool, form: Form, version: str = "v1") -> str:
+    if version != "v1" and field == "requirements":
         return requirements_verdict(value, form)
     return "agree" if agrees(field, value, form) else "disagree"
 
 
-def outcome(fact: Fact | None, form: Form, v2: bool = False) -> str:
+def outcome(fact: Fact | None, form: Form, version: str = "v1") -> str:
     if fact is None:
         return "silent"
-    return verdict(fact.field, fact.value, form, v2)
+    return verdict(fact.field, fact.value, form, version)
 
 
-def compare(finding: Finding, v2: bool = False) -> dict[str, tuple[Fact | None, str]]:
-    facts = extract(finding.text)
-    if v2:
-        facts["requirements"] = requirements_v2(finding.text)
-    return {field: (facts[field], outcome(facts[field], finding.form, v2)) for field in FIELDS}
+def _extract_v2(text: str) -> dict[str, Fact | None]:
+    return {**extract(text), "requirements": requirements_v2(text)}
+
+
+EXTRACT = {"v1": extract, "v2": _extract_v2, "v2.1": extract_v2_1}
+VERSIONS = tuple(EXTRACT)
+
+
+def compare(finding: Finding, version: str = "v1") -> dict[str, tuple[Fact | None, str]]:
+    facts = EXTRACT[version](finding.text)
+    return {field: (facts[field], outcome(facts[field], finding.form, version)) for field in FIELDS}

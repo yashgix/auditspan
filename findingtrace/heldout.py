@@ -1,5 +1,6 @@
-"""Score the v1 and v2 requirements extractors on the blind hold-out labelled by an independent model."""
+"""Score each version's requirements extractor on the blind hold-out labelled by an independent model."""
 
+import hashlib
 import json
 from collections import Counter
 from pathlib import Path
@@ -8,18 +9,33 @@ from .compare import AB, requirements_verdict
 from .data import Finding
 from .extract import requirements
 from .requirements_v2 import requirements_v2
+from .rules_v2_1 import requirements_v2_1
 from .stats import wilson
 
 HELDOUT_DIR = Path(__file__).resolve().parent.parent / "study" / "heldout"
 LABEL_FILE = "labels-codex.jsonl"
-EXTRACTORS = {"v1": requirements, "v2": requirements_v2}
+DEV_FILE = "dev-ids.jsonl"
+# v2.1 was written after reviewing hold-out errors, so its hold-out scores are not blind.
+EXTRACTORS = {"v1": requirements, "v2": requirements_v2, "v2.1": requirements_v2_1}
 # "label_title" matches how data/labels.json defines a stated requirement. "all" adds body sentences.
 SCOPES = {"label_title": ("label", "title"), "all": ("label", "title", "prose")}
 
 
-def load_heldout(folder: str | Path = HELDOUT_DIR) -> list[dict]:
-    with (Path(folder) / LABEL_FILE).open(encoding="utf-8") as handle:
+def _read_jsonl(path: Path) -> list[dict]:
+    with path.open(encoding="utf-8") as handle:
         return [json.loads(line) for line in handle]
+
+
+def load_heldout(folder: str | Path = HELDOUT_DIR) -> list[dict]:
+    return _read_jsonl(Path(folder) / LABEL_FILE)
+
+
+def load_dev_ids(folder: str | Path = HELDOUT_DIR) -> set[str]:
+    return {f"{row['report_id']} {row['ref']}" for row in _read_jsonl(Path(folder) / DEV_FILE)}
+
+
+def text_hash(finding: Finding) -> str:
+    return hashlib.sha256(finding.text.encode("utf-8")).hexdigest()
 
 
 def stated(label: dict, scope: str, drop_p: bool = False) -> str:
@@ -57,13 +73,19 @@ def score_extractor(pairs: list[tuple[Finding, dict]], extractor) -> dict:
     return result
 
 
-def score(findings, labels: list[dict]) -> dict:
+def score(findings, labels: list[dict], dev_ids: set[str]) -> dict:
+    """Findings whose text equals a development finding's text are left out, since that text was seen."""
     by_key = {f"{finding.report_id} {finding.ref}": finding for finding in findings}
+    seen = {text_hash(by_key[key]) for key in dev_ids}
     pairs = [(by_key[label["id"]], label) for label in labels]
+    duplicates = [label["id"] for finding, label in pairs if text_hash(finding) in seen]
+    pairs = [(finding, label) for finding, label in pairs if label["id"] not in duplicates]
     result = {name: score_extractor(pairs, extractor) for name, extractor in EXTRACTORS.items()}
+    result["drawn"] = len(labels)
     result["findings"] = len(pairs)
-    result["labels_where"] = dict(Counter(label["where"] for label in labels))
-    result["labels_with_p"] = sum("P" in label["letters"] for label in labels)
+    result["duplicate_text_left_out"] = duplicates
+    result["labels_where"] = dict(Counter(label["where"] for _, label in pairs))
+    result["labels_with_p"] = sum("P" in label["letters"] for _, label in pairs)
     result["labels_vs_form"] = dict(
         Counter(requirements_verdict(label["letters"], f.form) for f, label in pairs if label["letters"] != "none")
     )

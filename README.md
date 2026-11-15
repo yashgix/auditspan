@@ -84,7 +84,7 @@ The FAC adds and amends records, so a later download may differ. The manifest sa
 
 ## Results
 
-The block below is rendered from `results/metrics.json`, `results/metrics_v2.json` and `data/`. No number in it is typed by hand. Re-render it
+The block below is rendered from the JSON files in `results/` and from `data/`. No number in it is typed by hand. Re-render it
 with `python demo.py --readme README.md --out README.md` after re-running the experiment.
 
 Read the per-field lines carefully: `9 form rows differ` counts **findings**, not rows — the findings whose filed
@@ -105,8 +105,10 @@ text cannot be checked against. The v1 numbers stay as they were, and the v1 exa
 version 2 outcome. The version 2 lines come from `results/metrics_v2.json`.
 
 The version 2 requirements rules were frozen at the git tag `v2-rules-frozen`. Then 150 new findings were drawn at
-random from those not looked at while writing the rules, and labelled blind by Codex, an OpenAI model. The blind
-hold-out lines below are the honest measure of version 2. The labels' own limits are in `SPEC-v2.md` section 5:
+random from those not looked at while writing the rules, and labelled blind by Codex, an OpenAI model. One of them
+has the same text as a finding looked at during development, so it is left out. The frozen v2 row of the blind
+hold-out is the honest measure of version 2. Version 2.1 holds fixes found by a review after that score, so its
+row is not blind. The labels' own limits are in `SPEC-v2.md` section 5:
 the label prompt shares the rule writer's reading of a few cases, and no person has checked the labels yet. The ids,
 labels, prompt and draw script are in `study/heldout/` with checksums.
 
@@ -151,16 +153,23 @@ Labelled sample, version 2. The version 2 rules were written while reading this 
 | --- | --- | --- | --- | --- |
 | requirements | 2023-09-GSAFAC-0000374131 2023-003 | ABE | E | Compliance Requirement: Eligibility and Allowable Activities/Costs |
 
+### Version 2.1, after review (not blind)
+Fixes found by an independent review after the hold-out was scored (SPEC-v2.md section 6). Its hold-out row below is therefore not blind. Severity is as in version 1.
+- repeat: 2474 covered, 2452 agree, 22 disagree (0.9% [0.5%, 1.4%]) in 19 reports, 26 form rows differ.
+- questioned costs: 3474 covered, 3437 agree, 37 disagree (1.1% [0.7%, 1.5%]) in 32 reports, 17 form rows differ.
+- requirements: 2445 covered, 2268 agree, 83 disagree (3.4% [2.6%, 4.3%]) in 71 reports, 33 form rows differ.
+
 ### Blind hold-out: requirements on new findings
-150 findings drawn after the version 2 rules were frozen (git tag `v2-rules-frozen`), labelled by Codex (an OpenAI model) from the text alone, not by an auditor. Raw scores, before any human check.
+150 findings drawn after the version 2 rules were frozen (git tag `v2-rules-frozen`), labelled by Codex (an OpenAI model) from the text alone, not by an auditor. Left out because their text equals a development finding's text: 2024-09-GSAFAC-0000384866 2024-001. Scored: 149. Raw scores, before any human check.
 
 | rules | extracted | precision | false positives | A vs B only | recall, label or title | recall, label or title, P ignored | recall, all statements |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| v1 | 9 | 100.0% [70.1%, 100.0%] (9/9) | 0 | 0 | 11.4% [6.1%, 20.3%] (9/79) | 12.2% [6.5%, 21.5%] (9/74) | 8.4% [4.5%, 15.2%] (9/107) |
-| v2 | 59 | 91.5% [81.6%, 96.3%] (54/59) | 3 | 0 | 68.4% [57.5%, 77.6%] (54/79) | 74.3% [63.3%, 82.9%] (55/74) | 50.5% [41.1%, 59.8%] (54/107) |
+| v1 | 9 | 100.0% [70.1%, 100.0%] (9/9) | 0 | 0 | 11.4% [6.1%, 20.3%] (9/79) | 12.2% [6.5%, 21.5%] (9/74) | 8.5% [4.5%, 15.4%] (9/106) |
+| v2 (frozen, blind) | 59 | 91.5% [81.6%, 96.3%] (54/59) | 3 | 0 | 68.4% [57.5%, 77.6%] (54/79) | 74.3% [63.3%, 82.9%] (55/74) | 50.9% [41.6%, 60.3%] (54/106) |
+| v2.1 (after review, not blind) | 56 | 96.4% [87.9%, 99.0%] (54/56) | 0 | 0 | 68.4% [57.5%, 77.6%] (54/79) | 74.3% [63.3%, 82.9%] (55/74) | 50.9% [41.6%, 60.3%] (54/106) |
 
-- Codex labels: 35 label, 44 title, 28 body sentence, 43 none. 11 include P (Other), which no rule emits. Against the form: 84 agree, 19 disagree, 0 a_vs_b, 4 uncheckable.
-- v2 facts against the form: 55 agree, 3 disagree, 0 a_vs_b, 1 uncheckable.
+- Codex labels: 35 label, 44 title, 27 body sentence, 43 none. 11 include P (Other), which no rule emits. Against the form: 84 agree, 19 disagree, 0 a_vs_b, 3 uncheckable.
+- v2 facts against the form: 55 agree, 3 disagree, 0 a_vs_b, 1 uncheckable. v2.1 facts against the form: 54 agree, 2 disagree, 0 a_vs_b, 0 uncheckable.
 <!-- results:end -->
 
 ## Limits

@@ -16,14 +16,14 @@ def load_labels(data_dir: str | Path = DATA_DIR) -> list[dict]:
     return json.loads((Path(data_dir) / "labels.json").read_text(encoding="utf-8"))["findings"]
 
 
-def evaluate(findings: Iterable[Finding], rows: Iterable[Mapping], v2: bool = False) -> dict[str, dict[str, int]]:
+def evaluate(findings: Iterable[Finding], rows: Iterable[Mapping], version: str = "v1") -> dict[str, dict[str, int]]:
     by_key = {finding.key: finding for finding in findings}
     counts = {field: dict.fromkeys(_COUNTS, 0) for field in FIELDS}
     for row in rows:
         finding = by_key.get((row["report_id"], row["ref"]))
         if finding is None:
             continue
-        results = compare(finding, v2)
+        results = compare(finding, version)
         labels = row["labels"]
         for field in labels:
             if field not in counts:
@@ -41,6 +41,6 @@ def evaluate(findings: Iterable[Finding], rows: Iterable[Mapping], v2: bool = Fa
                     counts[field]["found"] += 1
             if result == "disagree":
                 counts[field]["flagged"] += 1
-                if label is not None and verdict(field, label, finding.form, v2) == "disagree":
+                if label is not None and verdict(field, label, finding.form, version) == "disagree":
                     counts[field]["confirmed"] += 1
     return counts

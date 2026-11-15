@@ -3,9 +3,10 @@
 import hashlib
 import unittest
 
-from findingtrace.data import Finding, Form
+from findingtrace import DATA_DIR
+from findingtrace.data import Finding, Form, load
 from findingtrace.extract import requirements
-from findingtrace.heldout import HELDOUT_DIR, load_heldout, score_extractor, stated
+from findingtrace.heldout import HELDOUT_DIR, load_dev_ids, load_heldout, score_extractor, stated, text_hash
 
 
 def finding(text, filed):
@@ -53,6 +54,15 @@ class FilesTest(unittest.TestCase):
         ids = (HELDOUT_DIR / "ids.txt").read_text().split("\n")[:-1]
         self.assertEqual([row["id"] for row in load_heldout()], ids)
         self.assertEqual(len(ids), 150)
+
+    def test_development_and_hold_out_are_disjoint_by_id_and_text(self):
+        findings = {f"{f.report_id} {f.ref}": f for f in load(DATA_DIR).findings}
+        dev, held = load_dev_ids(), [row["id"] for row in load_heldout()]
+        self.assertFalse(dev & set(held))
+        seen = {text_hash(findings[key]) for key in dev}
+        overlap = [key for key in held if text_hash(findings[key]) in seen]
+        self.assertEqual(overlap, ["2024-09-GSAFAC-0000384866 2024-001"])
+        self.assertEqual(findings[overlap[0]].text, findings["2024-09-GSAFAC-0000385016 2024-001"].text)
 
 
 if __name__ == "__main__":

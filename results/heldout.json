@@ -1,14 +1,18 @@
 {
- "findings": 150,
+ "drawn": 150,
+ "duplicate_text_left_out": [
+  "2024-09-GSAFAC-0000384866 2024-001"
+ ],
+ "findings": 149,
  "labels_vs_form": {
   "agree": 84,
   "disagree": 19,
-  "uncheckable": 4
+  "uncheckable": 3
  },
  "labels_where": {
   "label": 35,
   "none": 43,
-  "prose": 28,
+  "prose": 27,
   "title": 44
  },
  "labels_with_p": 11,
@@ -27,18 +31,18 @@
    "rate": 1.0
   },
   "recall_all": {
-   "hi": 0.152169,
+   "hi": 0.153534,
    "k": 9,
-   "lo": 0.044882,
-   "n": 107,
-   "rate": 0.084112
+   "lo": 0.045312,
+   "n": 106,
+   "rate": 0.084906
   },
   "recall_all_without_p": {
-   "hi": 0.167009,
+   "hi": 0.168653,
    "k": 9,
-   "lo": 0.049583,
-   "n": 97,
-   "rate": 0.092784
+   "lo": 0.050108,
+   "n": 96,
+   "rate": 0.09375
   },
   "recall_label_title": {
    "hi": 0.202548,
@@ -72,18 +76,62 @@
    "rate": 0.915254
   },
   "recall_all": {
-   "hi": 0.597589,
+   "hi": 0.602593,
    "k": 54,
-   "lo": 0.411433,
-   "n": 107,
-   "rate": 0.504673
+   "lo": 0.415615,
+   "n": 106,
+   "rate": 0.509434
   },
   "recall_all_without_p": {
-   "hi": 0.661199,
+   "hi": 0.667179,
    "k": 55,
-   "lo": 0.467716,
-   "n": 97,
-   "rate": 0.56701
+   "lo": 0.473043,
+   "n": 96,
+   "rate": 0.572917
+  },
+  "recall_label_title": {
+   "hi": 0.775547,
+   "k": 54,
+   "lo": 0.574519,
+   "n": 79,
+   "rate": 0.683544
+  },
+  "recall_label_title_without_p": {
+   "hi": 0.829023,
+   "k": 55,
+   "lo": 0.633456,
+   "n": 74,
+   "rate": 0.743243
+  }
+ },
+ "v2.1": {
+  "a_vs_b_only": 0,
+  "extracted": 56,
+  "false_positive": 0,
+  "form": {
+   "agree": 54,
+   "disagree": 2
+  },
+  "precision": {
+   "hi": 0.990151,
+   "k": 54,
+   "lo": 0.878812,
+   "n": 56,
+   "rate": 0.964286
+  },
+  "recall_all": {
+   "hi": 0.602593,
+   "k": 54,
+   "lo": 0.415615,
+   "n": 106,
+   "rate": 0.509434
+  },
+  "recall_all_without_p": {
+   "hi": 0.667179,
+   "k": 55,
+   "lo": 0.473043,
+   "n": 96,
+   "rate": 0.572917
   },
   "recall_label_title": {
    "hi": 0.775547,

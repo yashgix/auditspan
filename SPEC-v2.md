@@ -92,6 +92,28 @@ Other fields keep the v1 rule. `verdict(field, value, form, v2=False)`, `outcome
     is used.
   - Both the extracted facts and the labels are also compared with the form, using `requirements_verdict`.
 - The scores are raw. A human check of the disagreements is reported separately, never folded into these numbers.
+- Text overlap: `draw.py` excluded development findings by id, not by text. One drawn finding,
+  2024-09-GSAFAC-0000384866 2024-001, has exactly the same text as development finding 2024-09-GSAFAC-0000385016
+  2024-001. `heldout.score` leaves out any hold-out finding whose text sha256 equals a development finding's, so
+  149 findings are scored. That is the headline. A test checks disjointness by id and by text hash.
+
+## 6. Version 2.1: fixes after review (not blind) (`findingtrace/rules_v2_1.py`)
+An independent review read the code and the hold-out errors after the hold-out was scored. Its fixes are version 2.1.
+Because they were found by looking at hold-out errors, the v2.1 hold-out scores are not blind. The frozen v2 result
+stays the headline, and v2.1 is reported beside it. `requirements_v2.py` is unchanged since the tag. v1 is unchanged
+because its acceptance tests pin it. v1's per-value answers are now the helpers `repeat_answer` and `costs_answer`,
+with the same behaviour, so v2.1 can replace one step.
+- Repeat: an explicit "yes" or "no" at the start of the labelled value wins. "Yes, prior finding 2023-001 has not
+  been corrected" is a repeat. v1 reads the "not" in the first sentence and says no.
+- Questioned costs: "None of" or "No ... of" at the start is not a no-costs answer. "None of the $50,000 was
+  allowable" questions $50,000, so it is true.
+- Requirements, title line: the scan stops at the first body-section heading (criteria, condition, cause, effect,
+  context, recommendation, questioned costs, statement of condition, views of responsible officials). Program
+  information lines are still skipped. A regulation title quoted under "Criteria" is no longer read as a title.
+- Requirements, audit filing: "reporting deadline ... single audit" and "audit reporting" are removed before
+  matching. Submitting the audit is not the Reporting requirement.
+- `compare`, `evaluate`, `summarize` and `run.main` take `version` ("v1", "v2" or "v2.1") instead of a v2 flag.
+  `experiment.py --v2-1-out` writes `results/metrics_v2_1.json`, and the hold-out file scores all three versions.
 
 ## Not changed in this version
 Severity, repeat and questioned costs. The labels in `data/labels.json`.

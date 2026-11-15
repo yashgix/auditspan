@@ -102,14 +102,14 @@ class RequirementsVerdictTest(unittest.TestCase):
     def test_v2_changes_only_requirements(self):
         form = make_form(significant=True, requirements="B")
         self.assertEqual(outcome(make_fact("requirements", "AB"), form), "disagree")
-        self.assertEqual(outcome(make_fact("requirements", "AB"), form, v2=True), "a_vs_b")
-        self.assertEqual(outcome(make_fact("severity", "material_weakness"), form, v2=True), "disagree")
+        self.assertEqual(outcome(make_fact("requirements", "AB"), form, version="v2"), "a_vs_b")
+        self.assertEqual(outcome(make_fact("severity", "material_weakness"), form, version="v2"), "disagree")
 
     def test_compare_v2_uses_v2_letters(self):
         text = "Compliance Requirement: Data Collection Form and Single Audit Reporting Package"
         finding = Finding("R", "1", 2024, text, make_form(requirements="N"))
         self.assertEqual(compare(finding)["requirements"][1], "disagree")
-        self.assertEqual(compare(finding, v2=True)["requirements"], (None, "silent"))
+        self.assertEqual(compare(finding, version="v2")["requirements"], (None, "silent"))
         self.assertEqual(OUTCOMES_V2, ("silent", "agree", "disagree", "a_vs_b", "uncheckable"))
 
 

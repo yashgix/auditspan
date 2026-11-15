@@ -139,7 +139,7 @@ class SummarizeTest(unittest.TestCase):
         self.assertEqual(metrics["severity_text_vs_form"][2], 1)
 
     def test_v2_adds_outcome_counts(self):
-        metrics = run.summarize(make_corpus(), ROWS, v2=True)
+        metrics = run.summarize(make_corpus(), ROWS, version="v2")
         self.assertEqual(set(metrics), expected_keys() | {"a_vs_b", "uncheckable"})
         self.assertEqual(len(metrics["a_vs_b"]), len(FIELDS))
         self.assertEqual(metrics["a_vs_b"][:3], [0, 0, 0])

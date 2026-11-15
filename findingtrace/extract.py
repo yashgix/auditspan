@@ -98,12 +98,19 @@ def severity(text: str) -> Fact | None:
     return None
 
 
-def repeat(text: str) -> Fact | None:
+def repeat_answer(value: str) -> bool | None:
+    if re.search(REPEAT_NO, value, CASE):
+        return False
+    if re.match(REPEAT_YES, value, CASE):
+        return True
+    return None
+
+
+def repeat(text: str, answer=repeat_answer) -> Fact | None:
     for value, start, end in labelled_values(REPEAT_LABEL, text):
-        if re.search(REPEAT_NO, value, CASE):
-            return Fact("repeat", False, start, end, text[start:end])
-        if re.match(REPEAT_YES, value, CASE):
-            return Fact("repeat", True, start, end, text[start:end])
+        found = answer(value)
+        if found is not None:
+            return Fact("repeat", found, start, end, text[start:end])
     for pattern, value in ((NOT_REPEAT_SENTENCE, False), (REPEAT_SENTENCE, True)):
         match = re.search(pattern, text, CASE)
         if match:
@@ -111,15 +118,22 @@ def repeat(text: str) -> Fact | None:
     return None
 
 
-def questioned_costs(text: str) -> Fact | None:
+def costs_answer(value: str) -> bool | None:
+    if re.search(BELOW_THRESHOLD, value, CASE):
+        return None
+    if re.match(NO_COSTS, value, CASE):
+        return False
+    amount = re.search(AMOUNT, value)
+    if amount and float(amount.group(1).replace(",", "")) > 0:
+        return True
+    return None
+
+
+def questioned_costs(text: str, answer=costs_answer) -> Fact | None:
     for value, start, end in labelled_values(QUESTIONED_LABEL, text):
-        if re.search(BELOW_THRESHOLD, value, CASE):
-            continue
-        if re.match(NO_COSTS, value, CASE):
-            return Fact("questioned_costs", False, start, end, text[start:end])
-        amount = re.search(AMOUNT, value)
-        if amount and float(amount.group(1).replace(",", "")) > 0:
-            return Fact("questioned_costs", True, start, end, text[start:end])
+        found = answer(value)
+        if found is not None:
+            return Fact("questioned_costs", found, start, end, text[start:end])
     match = re.search(NO_COSTS_SENTENCE, text, CASE)
     if match:
         return Fact("questioned_costs", False, match.start(), match.end(), text[match.start() : match.end()])

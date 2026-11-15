@@ -3,6 +3,22 @@
 **Evidence-linked extraction you can audit.** Every fact the tool reports points at the exact characters it came
 from, and its error rate is reported with intervals rather than claimed.
 
+Write-up with the figures: https://yashgix.github.io/findingtrace/
+
+## Main result
+
+On 149 blind findings (one duplicate of a development text left out), the v2 requirement rules recall 54/79 = 68.4% of
+the requirements the text states in a label or title, against 9/79 = 11.4% for v1, with precision 54/59 = 91.5%.
+
+- The labels come from an independent model labeller (Codex) and have not been checked by a person yet. The label
+  prompt's examples share the rule writer's reading of a few cases.
+- v2.1 is a fix made after reviewing that score, so it is not blind. It removes the 3 false positives and leaves
+  recall unchanged.
+- On the labelled sample used while writing the rules, v2 recall was 47/50. The drop to 54/79 on new findings is the
+  honest number.
+- A versus B differences (auditors file either letter for tests done together) are reported separately.
+- A federal Single Audit is a stand-in for SOX evidence, which is private. Nothing here is a SOX result.
+
 ## The question
 
 A US organisation that spends $750,000 or more of federal awards in a fiscal year must obtain a Single Audit
@@ -20,7 +36,7 @@ value side by side. Accuracy is measured on a labelled sample, not asserted.
 
 These are government Single Audits under the Uniform Guidance (2 CFR 200, Subpart F), not Sarbanes-Oxley audits of
 public companies. SOX evidence is private. The Federal Audit Clearinghouse is a large public corpus of real control
-findings that also carries auditor-filed flags to check the text against. Nothing here is claimed about how any company builds audit tooling.
+findings that also carries auditor-filed flags to check the text against.
 
 ## What is here
 
@@ -30,7 +46,7 @@ findings that also carries auditor-filed flags to check the text against. Nothin
 - `findingtrace/sample.py`, `findingtrace/labels.py`, `findingtrace/stats.py` — the labelled sample, its scoring,
   Wilson intervals and a report-level bootstrap.
 - `findingtrace/run.py`, `experiment.py` — the metrics and the JSON they are written to.
-- `SPEC.md` is the v1 specification. `SPEC-v2.md` lists what version 2 changes and why.
+- `docs/DESIGN.md` is the v1 design. `SPEC-v2.md` lists what version 2 changes and why.
 - `python -m findingtrace disagreements` — the main output: a CSV of disagreements, each row putting the auditor's
   own words next to what the same auditor filed.
 
@@ -42,6 +58,7 @@ Python 3.14, the standard library plus NumPy. From the repository root:
 make test        # own and v1 acceptance tests. Tests that need data/ skip with a clear message when it is missing
 make lint        # ruff check and ruff format --check
 make experiment  # writes results/metrics.json (v1) and results/metrics_v2.json (v2)
+make page        # rebuilds docs/index.html from results/
 
 python demo.py                                     # one-line summary of results/metrics.json
 python demo.py --readme README.md --out README.md  # re-render the results block below
@@ -62,7 +79,7 @@ values and the outcomes. `disagreements` writes a CSV with the columns `report_i
 form_value, start, end, quote`, findings in load order and fields in the fixed order
 `severity, repeat, questioned_costs, requirements`.
 
-## Data
+## Data and licenses
 
 `data/findings_text.csv` (8,772 rows) and `data/findings.csv` (21,183 rows) hold every row of the FAC's 2025
 `findings_text` and `findings` files — what the FAC accepted in calendar 2025 — whose `fac_accepted_date` falls from
@@ -72,6 +89,17 @@ form_value, start, end, quote`, findings in load order and fields in the fixed o
 The FAC states: "The data collected by the FAC is free to use and in the public domain" (fac.gov/data, read
 2026-11-14). The FAC is run by the U.S. General Services Administration. The findings are written by independent
 auditors in Single Audit reports, not in SOX audits.
+
+Terms, checked on fac.gov on 15 Nov 2026: the FAC says its data "is free to use and in the public domain", so the two
+CSV files may be redistributed here. No data was removed from the history because of licensing.
+
+The letter key for compliance requirements, quoted in `study/heldout/LABEL-PROMPT.md`, comes from Form SF-SAC (the
+federal Single Audit data collection form) as published by the New Mexico Department of Finance and Administration:
+https://www.nmdfa.state.nm.us/wp-content/uploads/2026/04/SF-SAC-Data-Collection-Form-for-Single-Audits.pdf. The form
+is a US federal government form and its short key is quoted here as a source note, not redistributed as a file.
+
+Our code is MIT (`LICENSE`). `data/labels.json`, `study/heldout/` and the other files written for this repository are
+under the same licence. The only dependency is NumPy (BSD), with ruff (MIT) for linting.
 
 To rebuild or check the pinned files:
 
@@ -204,10 +232,17 @@ demo.py         renders the results block and the summary line
 experiment.py   writes results/metrics.json
 tools/          fetch_data.py: pinned rebuild and --verify check
 data/           pinned CSVs, labels, manifest, licence note
-docs/           DESIGN.md, INTERVIEW.md
+docs/           DESIGN.md, REVIEW.md, index.html (the write-up page)
+study/          the blind hold-out: ids, labels, label prompt, draw script, checksums
 ```
 
 ## References
 
 - 2 CFR 200.501 and Subpart F, eCFR (the Single Audit requirement).
 - FAC public data downloads: https://www.fac.gov/data/download/
+
+## Licence
+
+MIT, see `LICENSE`. Data terms are in "Data and licenses" above.
+
+Built with Arcturus (Claude Code builders, Codex review). Reviewed and verified by hand.

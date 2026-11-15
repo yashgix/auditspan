@@ -1,6 +1,6 @@
 # findingtrace, SPEC v2: what changes from v1 and why
 
-`SPEC.md` (v1) stays as written, and every v1 behaviour, name and metric it fixes is kept. v2 runs beside it.
+Version 1 (git tag `v1-pipeline-final`, described in `docs/DESIGN.md`) stays as written, and every v1 behaviour, name and metric is kept. v2 runs beside it.
 The v1 metrics stay in `results/metrics.json`. The v2 metrics go to `results/metrics_v2.json`. v2 changes only the
 requirements field. Severity, repeat and questioned costs are exactly as in v1.
 

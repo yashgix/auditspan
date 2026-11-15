@@ -10,3 +10,8 @@ The FAC states on https://www.fac.gov/data/ (read 14 November 2026):
 
 The FAC is run by the U.S. General Services Administration. The findings are written by independent auditors in
 Single Audit reports under the Uniform Guidance (2 CFR 200, Subpart F); they are not Sarbanes-Oxley (SOX) audits.
+
+Re-read on 15 November 2026: the same sentence is still on https://www.fac.gov/data/.
+
+`study/heldout/LABEL-PROMPT.md` quotes the compliance requirement key from Form SF-SAC, a US federal form. The copy
+used was published by the New Mexico Department of Finance and Administration (nmdfa.state.nm.us).

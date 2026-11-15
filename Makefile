@@ -12,4 +12,4 @@ data-check:
 	$(PYTHON) tools/fetch_data.py --verify
 
 experiment:
-	$(PYTHON) experiment.py --out results/metrics.json --v2-out results/metrics_v2.json
+	$(PYTHON) experiment.py --out results/metrics.json --v2-out results/metrics_v2.json --heldout-out results/heldout.json

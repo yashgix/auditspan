@@ -68,5 +68,30 @@ Other fields keep the v1 rule. `verdict(field, value, form, v2=False)`, `outcome
 - When `metrics_v2.json` is present, a v2 section shows the requirements line, its labelled-sample scores (marked
   in-sample) and the first confirmed v2 requirements disagreement in `labels.json`, in the same format as v1.
 
+## 5. Blind hold-out (`study/heldout/`, `findingtrace/heldout.py`)
+- Draw: after the tag `v2-rules-frozen`, `draw.py` (seed 20261115) drew 150 findings at random from those not in
+  `dev-ids.jsonl`. That file lists every finding looked at while the rules were written, and why. `ids.txt` lists the
+  drawn ids. The texts are in `data/findings_text.csv`, and `draw.py` rebuilds the labeller's input file from them
+  (sha256 `2e7d5513691ae641db22a5724a3ff342426275eb511601ad8ae2e95557a0906c`). `SHA256SUMS` covers the folder.
+- Labeller: Codex (OpenAI), run through ChatGPT Plus with the default model and high reasoning, in a read-only
+  sandbox. It saw only the 150 ids and texts and `LABEL-PROMPT.md`, not the rules, their output or the form values.
+  The labels are `labels-codex.jsonl`, unedited. Nobody has reviewed them yet.
+- Known bias: the prompt was written by the author of the rules. Its examples share the rules' reading of a few cases
+  ("SEFA reporting" and the "reporting package" are not L, "Cost Principles" in the 2 CFR 200 title is not B,
+  "Allowable Activities and Costs" is A and B, an explicit code beats a name). Agreement on those cases is not
+  independent. The prompt also asks for P when the text names a requirement outside A to N. No rule emits P, so
+  recall is also reported with P ignored.
+- Scoring (`heldout.score`, written by `experiment.py --heldout-out` to `results/heldout.json`): for v1
+  `requirements` and v2 `requirements_v2`:
+  - precision is exact letter equality with the label, over extracted facts.
+  - false positives are facts where the label says none.
+  - "A vs B only" counts facts that differ from the label only in A versus B.
+  - recall uses two scopes: `label_title` (stated in a label or title, as `data/labels.json` defines it) and `all`
+    (body sentences too).
+  - Every rate has a Wilson interval. The findings come from different reports almost always, so no report bootstrap
+    is used.
+  - Both the extracted facts and the labels are also compared with the form, using `requirements_verdict`.
+- The scores are raw. A human check of the disagreements is reported separately, never folded into these numbers.
+
 ## Not changed in this version
 Severity, repeat and questioned costs. The labels in `data/labels.json`.

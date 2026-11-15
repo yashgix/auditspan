@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 
-from . import DATA_DIR
+from . import DATA_DIR, heldout
 from .compare import FORM_COLUMNS, OUTCOMES, OUTCOMES_V2, compare, form_value
 from .data import Corpus, load
 from .extract import FIELDS
@@ -116,10 +116,18 @@ def summarize(corpus: Corpus, rows, v2: bool = False) -> dict:
     return metrics
 
 
-def main(data_dir=DATA_DIR, out="results/metrics.json", v2: bool = False) -> dict:
-    """Load the pinned data, compute the metrics, and write them as JSON."""
-    metrics = summarize(load(data_dir), load_labels(data_dir), v2)
+def _write(metrics: dict, out) -> dict:
     path = Path(out)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(metrics, sort_keys=True, indent=1) + "\n", encoding="utf-8")
     return metrics
+
+
+def main(data_dir=DATA_DIR, out="results/metrics.json", v2: bool = False) -> dict:
+    """Load the pinned data, compute the metrics, and write them as JSON."""
+    return _write(summarize(load(data_dir), load_labels(data_dir), v2), out)
+
+
+def main_heldout(data_dir=DATA_DIR, heldout_dir=heldout.HELDOUT_DIR, out="results/heldout.json") -> dict:
+    """Score v1 and v2 requirements on the blind hold-out and write them as JSON."""
+    return _write(heldout.score(load(data_dir).findings, heldout.load_heldout(heldout_dir)), out)

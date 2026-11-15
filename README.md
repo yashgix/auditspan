@@ -104,6 +104,12 @@ costs" are often tested together, and auditors file either letter. The other is 
 text cannot be checked against. The v1 numbers stay as they were, and the v1 example table shows each example's
 version 2 outcome. The version 2 lines come from `results/metrics_v2.json`.
 
+The version 2 requirements rules were frozen at the git tag `v2-rules-frozen`. Then 150 new findings were drawn at
+random from those not looked at while writing the rules, and labelled blind by Codex, an OpenAI model. The blind
+hold-out lines below are the honest measure of version 2. The labels' own limits are in `SPEC-v2.md` section 5:
+the label prompt shares the rule writer's reading of a few cases, and no person has checked the labels yet. The ids,
+labels, prompt and draw script are in `study/heldout/` with checksums.
+
 <!-- results:start -->
 Corpus: 6271 findings in 3293 reports, from 8772 text rows and 21183 form rows. 151 split texts and 396 form-only findings are left out. Cited facts: 9503, of which 9503 are an exact copy of their source span (this checks the copying, not that each quote supports its fact).
 
@@ -144,6 +150,17 @@ Labelled sample, version 2. The version 2 rules were written while reading this 
 | field | finding | text value | form value | quote |
 | --- | --- | --- | --- | --- |
 | requirements | 2023-09-GSAFAC-0000374131 2023-003 | ABE | E | Compliance Requirement: Eligibility and Allowable Activities/Costs |
+
+### Blind hold-out: requirements on new findings
+150 findings drawn after the version 2 rules were frozen (git tag `v2-rules-frozen`), labelled by Codex (an OpenAI model) from the text alone, not by an auditor. Raw scores, before any human check.
+
+| rules | extracted | precision | false positives | A vs B only | recall, label or title | recall, label or title, P ignored | recall, all statements |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| v1 | 9 | 100.0% [70.1%, 100.0%] (9/9) | 0 | 0 | 11.4% [6.1%, 20.3%] (9/79) | 12.2% [6.5%, 21.5%] (9/74) | 8.4% [4.5%, 15.2%] (9/107) |
+| v2 | 59 | 91.5% [81.6%, 96.3%] (54/59) | 3 | 0 | 68.4% [57.5%, 77.6%] (54/79) | 74.3% [63.3%, 82.9%] (55/74) | 50.5% [41.1%, 59.8%] (54/107) |
+
+- Codex labels: 35 label, 44 title, 28 body sentence, 43 none. 11 include P (Other), which no rule emits. Against the form: 84 agree, 19 disagree, 0 a_vs_b, 4 uncheckable.
+- v2 facts against the form: 55 agree, 3 disagree, 0 a_vs_b, 1 uncheckable.
 <!-- results:end -->
 
 ## Limits
@@ -165,6 +182,8 @@ Labelled sample, version 2. The version 2 rules were written while reading this 
   involved and is not evidence that the text is wrong.
 - One subset only (FAC acceptances July–December 2025). Findings within a report are correlated, hence the report-level
   bootstrap. The labelled sample's Wilson intervals treat findings as independent.
+- The blind hold-out labels come from one AI labeller (Codex), not an auditor. The label prompt was written by the
+  author of the rules and shares its reading of a few cases, so agreement on those cases is not independent.
 - Proxy domain: Single Audit findings under the Uniform Guidance, not SOX.
 
 ## Layout

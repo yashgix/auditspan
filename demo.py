@@ -157,7 +157,43 @@ def _v2_lines(metrics: dict, findings: dict, rows: list[dict]) -> list[str]:
     return lines
 
 
-def render_block(metrics: dict, data_dir=DATA_DIR, metrics_v2: dict | None = None) -> str:
+def _wilson_cell(rate: dict) -> str:
+    return f"{_pct(rate['rate'])} {_interval(rate['lo'], rate['hi'])} ({rate['k']}/{rate['n']})"
+
+
+def _counts(counts: dict) -> str:
+    return ", ".join(f"{counts.get(name, 0)} {name}" for name in ("agree", "disagree", "a_vs_b", "uncheckable"))
+
+
+def _heldout_lines(scores: dict) -> list[str]:
+    where = scores["labels_where"]
+    lines = [
+        "### Blind hold-out: requirements on new findings",
+        f"{scores['findings']} findings drawn after the version 2 rules were frozen (git tag `v2-rules-frozen`), "
+        "labelled by Codex (an OpenAI model) from the text alone, not by an auditor. "
+        "Raw scores, before any human check.",
+        "",
+        "| rules | extracted | precision | false positives | A vs B only | recall, label or title | "
+        "recall, label or title, P ignored | recall, all statements |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for name in ("v1", "v2"):
+        s = scores[name]
+        cells = (name, str(s["extracted"]), _wilson_cell(s["precision"]), str(s["false_positive"]),
+                 str(s["a_vs_b_only"]), _wilson_cell(s["recall_label_title"]),
+                 _wilson_cell(s["recall_label_title_without_p"]), _wilson_cell(s["recall_all"]))  # fmt: skip
+        lines.append("| " + " | ".join(cells) + " |")
+    lines += [
+        "",
+        f"- Codex labels: {where.get('label', 0)} label, {where.get('title', 0)} title, {where.get('prose', 0)} "
+        f"body sentence, {where.get('none', 0)} none. {scores['labels_with_p']} include P (Other), which no rule "
+        f"emits. Against the form: {_counts(scores['labels_vs_form'])}.",
+        f"- v2 facts against the form: {_counts(scores['v2']['form'])}.",
+    ]
+    return lines
+
+
+def render_block(metrics: dict, data_dir=DATA_DIR, metrics_v2: dict | None = None, heldout: dict | None = None) -> str:
     findings = {finding.key: finding for finding in load(data_dir).findings}
     rows = load_labels(data_dir)
     lines = [
@@ -178,6 +214,8 @@ def render_block(metrics: dict, data_dir=DATA_DIR, metrics_v2: dict | None = Non
     ]
     if metrics_v2 is not None:
         lines += ["", *_v2_lines(metrics_v2, findings, rows)]
+    if heldout is not None:
+        lines += ["", *_heldout_lines(heldout)]
     return chr(10).join(lines)
 
 
@@ -200,6 +238,11 @@ def _summary(metrics: dict) -> str:
     return f"{findings} findings across {reports} reports, {facts} cited facts, {disagreements} severity disagreements."
 
 
+def _optional(results: str, name: str) -> dict | None:
+    path = Path(results) / name
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--results", default=DEFAULT_RESULTS)
@@ -214,9 +257,9 @@ def main(argv=None) -> int:
     if args.out is None:
         parser.error("--out is required with --readme")
     document = Path(args.readme).read_text(encoding="utf-8")
-    v2_path = Path(args.results) / "metrics_v2.json"
-    metrics_v2 = json.loads(v2_path.read_text(encoding="utf-8")) if v2_path.is_file() else None
-    block = render_block(metrics, args.data, metrics_v2)
+    block = render_block(
+        metrics, args.data, _optional(args.results, "metrics_v2.json"), _optional(args.results, "heldout.json")
+    )
     path = Path(args.out)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(replace_block(document, block), encoding="utf-8")

@@ -1,0 +1,103 @@
+{
+ "findings": 150,
+ "labels_vs_form": {
+  "agree": 84,
+  "disagree": 19,
+  "uncheckable": 4
+ },
+ "labels_where": {
+  "label": 35,
+  "none": 43,
+  "prose": 28,
+  "title": 44
+ },
+ "labels_with_p": 11,
+ "v1": {
+  "a_vs_b_only": 0,
+  "extracted": 9,
+  "false_positive": 0,
+  "form": {
+   "agree": 9
+  },
+  "precision": {
+   "hi": 1.0,
+   "k": 9,
+   "lo": 0.700855,
+   "n": 9,
+   "rate": 1.0
+  },
+  "recall_all": {
+   "hi": 0.152169,
+   "k": 9,
+   "lo": 0.044882,
+   "n": 107,
+   "rate": 0.084112
+  },
+  "recall_all_without_p": {
+   "hi": 0.167009,
+   "k": 9,
+   "lo": 0.049583,
+   "n": 97,
+   "rate": 0.092784
+  },
+  "recall_label_title": {
+   "hi": 0.202548,
+   "k": 9,
+   "lo": 0.061106,
+   "n": 79,
+   "rate": 0.113924
+  },
+  "recall_label_title_without_p": {
+   "hi": 0.215266,
+   "k": 9,
+   "lo": 0.065323,
+   "n": 74,
+   "rate": 0.121622
+  }
+ },
+ "v2": {
+  "a_vs_b_only": 0,
+  "extracted": 59,
+  "false_positive": 3,
+  "form": {
+   "agree": 55,
+   "disagree": 3,
+   "uncheckable": 1
+  },
+  "precision": {
+   "hi": 0.963258,
+   "k": 54,
+   "lo": 0.816482,
+   "n": 59,
+   "rate": 0.915254
+  },
+  "recall_all": {
+   "hi": 0.597589,
+   "k": 54,
+   "lo": 0.411433,
+   "n": 107,
+   "rate": 0.504673
+  },
+  "recall_all_without_p": {
+   "hi": 0.661199,
+   "k": 55,
+   "lo": 0.467716,
+   "n": 97,
+   "rate": 0.56701
+  },
+  "recall_label_title": {
+   "hi": 0.775547,
+   "k": 54,
+   "lo": 0.574519,
+   "n": 79,
+   "rate": 0.683544
+  },
+  "recall_label_title_without_p": {
+   "hi": 0.829023,
+   "k": 55,
+   "lo": 0.633456,
+   "n": 74,
+   "rate": 0.743243
+  }
+ }
+}

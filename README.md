@@ -57,7 +57,7 @@ Python 3.14, the standard library plus NumPy. From the repository root:
 ```
 make test        # own and v1 acceptance tests. Tests that need data/ skip with a clear message when it is missing
 make lint        # ruff check and ruff format --check
-make experiment  # writes results/metrics.json (v1) and results/metrics_v2.json (v2)
+make experiment  # writes results/metrics.json (v1), metrics_v2.json, metrics_v2_1.json and heldout.json
 make page        # rebuilds docs/index.html from results/
 
 python demo.py                                     # one-line summary of results/metrics.json
@@ -209,7 +209,7 @@ Fixes found by an independent review after the hold-out was scored (SPEC-v2.md s
   stratum is, and about 2 of its 100 findings may overlap those read during development.
 - Rules miss facts stated in unusual ways. Recall is reported per field and is low for requirements, where only
   labelled lines are read. Version 2 also reads title lines, but its rules were written while reading the random
-  labelled sample, so its scores there are in-sample until a fresh blind sample is scored. Multi-part findings (a
+  labelled sample, so its scores there are in-sample. The blind hold-out above is the measure on new findings. Multi-part findings (a
   different severity per part) and one text covering two findings are known error sources for severity and
   requirements.
 - Questioned costs under the $25,000 reporting threshold are skipped when the text says so. A small stated amount with
@@ -229,7 +229,8 @@ Fixes found by an independent review after the hold-out was scored (SPEC-v2.md s
 findingtrace/   package: data, extract, compare, stats, sample, labels, run, __main__
 tests/          unittest suite, one module per package module
 demo.py         renders the results block and the summary line
-experiment.py   writes results/metrics.json
+experiment.py   writes the JSON files in results/
+page.py         builds docs/index.html from results/ and data/
 tools/          fetch_data.py: pinned rebuild and --verify check
 data/           pinned CSVs, labels, manifest, licence note
 docs/           DESIGN.md, REVIEW.md, index.html (the write-up page)
@@ -245,4 +246,4 @@ study/          the blind hold-out: ids, labels, label prompt, draw script, chec
 
 MIT, see `LICENSE`. Data terms are in "Data and licenses" above.
 
-Built with Arcturus (Claude Code builders, Codex review). Reviewed and verified by hand.
+Built with Arcturus (Claude Code builders, Codex review). The labels are model-made and not yet checked by a person.

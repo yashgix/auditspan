@@ -85,7 +85,7 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
 
 <section class="wrap"><div class="col stack">
   <h2>The problem</h2>
-  <p>A US organisation that spends $750,000 or more of federal awards in a year must get a single audit. For each finding the auditor writes free text and also files structured flags on form SF-SAC: material weakness or significant deficiency, repeat finding, questioned costs, and the compliance requirement concerned. The same auditor wrote both, so they should agree. When they do not, a reader needs to see both sides and the words behind the claim.</p>
+  <p>A US organisation that spends $750,000 or more of federal awards in a fiscal year ($1,000,000 for fiscal years from 1 October 2024) must get a single audit. For each finding the auditor writes free text and also files structured flags on form SF-SAC: material weakness or significant deficiency, repeat finding, questioned costs, and the compliance requirement concerned. The same auditor wrote both, so they should agree. When they do not, a reader needs to see both sides and the words behind the claim.</p>
   <p>findingtrace lists every disagreement with the quote and the form value side by side. Accuracy is measured on labelled samples, not asserted.</p>
   <div class="example stack"><p class=small>Finding <code>2025-06-GSAFAC-0000392695 2025-001</code>. The text says <code>significant deficiency</code> (characters 1191 to 1213), so the tool extracts <b>significant deficiency</b>. The auditor filed <b>material weakness</b> on the form.</p></div>
 </div></section>
@@ -139,7 +139,7 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
 
 <footer class="wrap"><div class="col stack small muted">
   <p><b>Reproduce:</b> <code>make test</code>, <code>make experiment</code>, then <code>make page</code>. Every number on this page is generated from <code>results/*.json</code> and <code>data/</code> by <code>page.py</code>, except the prose.</p>
-  <p>Data: the Federal Audit Clearinghouse (U.S. General Services Administration), which states its data is free to use and in the public domain. Code is MIT. Built with Arcturus (Claude Code builders, Codex review), reviewed and verified by hand.</p>
+  <p>Data: the Federal Audit Clearinghouse (U.S. General Services Administration), which states its data is free to use and in the public domain. Code is MIT. Built with Arcturus (Claude Code builders, Codex review). The labels are model-made and not yet checked by a person.</p>
 </div></footer>
 </body>
 </html>

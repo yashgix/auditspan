@@ -5,7 +5,7 @@ from, and its error rate is reported with intervals rather than claimed.
 
 Write-up with the figures: https://yashgix.github.io/auditspan/
 
-Renamed from `findingtrace` on 16 Nov 2026. Frozen specs and git tags keep the old name.
+Renamed from `findingtrace` on 16 Nov 2026. Frozen files and git tags keep the old name.
 
 ## Main result
 

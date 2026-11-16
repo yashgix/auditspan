@@ -33,16 +33,24 @@ def _table(head: list[str], rows: list[list[str]]) -> str:
     return f'<div class="table-wrap"><table><thead><tr>{cells}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
+HELDOUT_HEAD = ["rules", "extracted", "precision", "false positives", "recall, label or title",
+                "recall, label or title, P ignored", "recall, all statements"]  # fmt: skip
+
+
+def _heldout_cells(title: str, s: dict) -> list[str]:
+    return [title, str(s["extracted"]), _wilson(s["precision"]), str(s["false_positive"]),
+            _wilson(s["recall_label_title"]), _wilson(s["recall_label_title_without_p"]),
+            _wilson(s["recall_all"])]  # fmt: skip
+
+
 def heldout_table(heldout: dict) -> str:
-    rows = []
-    for key, title in HELDOUT_ROWS.items():
-        s = heldout[key]
-        rows.append([title, str(s["extracted"]), _wilson(s["precision"]), str(s["false_positive"]),
-                     _wilson(s["recall_label_title"]), _wilson(s["recall_label_title_without_p"]),
-                     _wilson(s["recall_all"])])  # fmt: skip
-    head = ["rules", "extracted", "precision", "false positives", "recall, label or title",
-            "recall, label or title, P ignored", "recall, all statements"]  # fmt: skip
-    return _table(head, rows)
+    return _table(HELDOUT_HEAD, [_heldout_cells(title, heldout[key]) for key, title in HELDOUT_ROWS.items()])
+
+
+def second_model_table(heldout: dict) -> str:
+    return _table(
+        HELDOUT_HEAD, [_heldout_cells("v2 (frozen) against the second-model labels", heldout["second_model"]["v2"])]
+    )
 
 
 def bars(heldout: dict) -> str:
@@ -114,6 +122,8 @@ def values(results: Path, data_dir: Path) -> dict[str, str]:
         "codex_label": str(where["label"]), "codex_title": str(where["title"]),
         "codex_prose": str(where["prose"]), "codex_none": str(where["none"]),
         "heldout_table": heldout_table(heldout), "bars": bars(heldout),
+        "second_model_table": second_model_table(heldout),
+        "second_changed": str(heldout["second_model"]["labels_changed"]),
         "field_table": field_table(metrics, v2, v2_1), "severity_table": severity_table(metrics),
         "example": example(data_dir),
     }  # fmt: skip

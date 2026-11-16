@@ -76,6 +76,7 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
     <p>On {{blind_n}} blind findings (one duplicate of a development text left out), v2 finds {{v2_recall_frac}} of the requirements the text states in a label or title, against {{v1_recall_frac}} for v1, with precision {{v2_precision_frac}}.</p>
     <ul>
       <li>The labels come from an independent model labeller (Codex) and have not been checked by a person yet. The label prompt's examples share the rule writer's reading of a few cases.</li>
+      <li>A second model re-decided the 30 disputed findings after seeing both labels. That row is shown apart, and it is not blind.</li>
       <li>v2.1 came from a review after the score, so it is not blind. It removes the {{v2_false_positive}} false positives and leaves recall unchanged.</li>
       <li>In-sample v2 recall was {{in_sample_frac}}. The drop on new findings is the honest number.</li>
       <li>A federal single audit is a stand-in for SOX evidence, which is private. This is not a SOX result.</li>
@@ -124,6 +125,9 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
   <p class="small muted">Recall of requirements stated in a label or title, on the blind findings.</p>
   {{heldout_table}}
   <p class="small muted">Codex labelled {{codex_label}} findings by a labelled line, {{codex_title}} by title, {{codex_prose}} by a body sentence and {{codex_none}} as none. v2.1 fixes review findings and is not blind.</p>
+  <h3>Second-model adjudication (not blind, not a person's check)</h3>
+  <p>A separate label set for the 30 hold-out findings where v2, Codex and the form disagree in a way that moves a score. ChatGPT decided them after seeing the v2 letters, the Codex labels and the form, so it is not blind. Claude then corrected three answers (items 1, 4 and 12) that counted body text where the protocol does not. {{second_changed}} labels change. No person has checked them, and the blind row above stays the headline. The protocol and all 30 decisions are in <code>study/adjudication/</code>.</p>
+  {{second_model_table}}
 </div></section>
 
 <section class="wrap"><div class="col stack">

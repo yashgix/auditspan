@@ -128,7 +128,13 @@ def main(data_dir=DATA_DIR, out="results/metrics.json", version: str = "v1") -> 
     return _write(summarize(load(data_dir), load_labels(data_dir), version), out)
 
 
-def main_heldout(data_dir=DATA_DIR, heldout_dir=heldout.HELDOUT_DIR, out="results/heldout.json") -> dict:
-    """Score each version's requirements on the blind hold-out and write them as JSON."""
+def main_heldout(
+    data_dir=DATA_DIR,
+    heldout_dir=heldout.HELDOUT_DIR,
+    out="results/heldout.json",
+    adjudication_dir=heldout.ADJUDICATION_DIR,
+) -> dict:
+    """Score each version's requirements on the blind hold-out, plus v2 on the second-model labels, as JSON."""
     labels, dev_ids = heldout.load_heldout(heldout_dir), heldout.load_dev_ids(heldout_dir)
-    return _write(heldout.score(load(data_dir).findings, labels, dev_ids), out)
+    decisions = heldout.load_decisions(adjudication_dir)
+    return _write(heldout.score(load(data_dir).findings, labels, dev_ids, decisions), out)

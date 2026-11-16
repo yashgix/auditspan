@@ -15,6 +15,9 @@ from .stats import wilson
 HELDOUT_DIR = Path(__file__).resolve().parent.parent / "study" / "heldout"
 LABEL_FILE = "labels-codex.jsonl"
 DEV_FILE = "dev-ids.jsonl"
+# A second, non-blind label set for 30 disputed findings (study/adjudication/README.md). Never the headline.
+ADJUDICATION_DIR = HELDOUT_DIR.parent / "adjudication"
+DECISIONS_FILE = "decisions.jsonl"
 # v2.1 was written after reviewing hold-out errors, so its hold-out scores are not blind.
 EXTRACTORS = {"v1": requirements, "v2": requirements_v2, "v2.1": requirements_v2_1}
 # "label_title" matches how data/labels.json defines a stated requirement. "all" adds body sentences.
@@ -32,6 +35,16 @@ def load_heldout(folder: str | Path = HELDOUT_DIR) -> list[dict]:
 
 def load_dev_ids(folder: str | Path = HELDOUT_DIR) -> set[str]:
     return {f"{row['report_id']} {row['ref']}" for row in _read_jsonl(Path(folder) / DEV_FILE)}
+
+
+def load_decisions(folder: str | Path = ADJUDICATION_DIR) -> list[dict]:
+    return _read_jsonl(Path(folder) / DECISIONS_FILE)
+
+
+def adjudicate(labels: list[dict], decisions: list[dict]) -> list[dict]:
+    """The labels with each decision's resulting letters and location applied."""
+    result = {row["id"]: row["result"] for row in decisions}
+    return [label | result[label["id"]] if label["id"] in result else label for label in labels]
 
 
 def text_hash(finding: Finding) -> str:
@@ -73,7 +86,7 @@ def score_extractor(pairs: list[tuple[Finding, dict]], extractor) -> dict:
     return result
 
 
-def score(findings, labels: list[dict], dev_ids: set[str]) -> dict:
+def score(findings, labels: list[dict], dev_ids: set[str], decisions: list[dict] | None = None) -> dict:
     """Findings whose text equals a development finding's text are left out, since that text was seen."""
     by_key = {f"{finding.report_id} {finding.ref}": finding for finding in findings}
     seen = {text_hash(by_key[key]) for key in dev_ids}
@@ -89,4 +102,9 @@ def score(findings, labels: list[dict], dev_ids: set[str]) -> dict:
     result["labels_vs_form"] = dict(
         Counter(requirements_verdict(label["letters"], f.form) for f, label in pairs if label["letters"] != "none")
     )
+    if decisions:
+        adjusted = adjudicate([label for _, label in pairs], decisions)
+        second = list(zip([finding for finding, _ in pairs], adjusted, strict=True))
+        changed = sum(a != b for (_, a), b in zip(pairs, adjusted, strict=True))
+        result["second_model"] = {"v2": score_extractor(second, requirements_v2), "labels_changed": changed}
     return result

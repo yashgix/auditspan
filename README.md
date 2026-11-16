@@ -12,6 +12,8 @@ the requirements the text states in a label or title, against 9/79 = 11.4% for v
 
 - The labels come from an independent model labeller (Codex) and have not been checked by a person yet. The label
   prompt's examples share the rule writer's reading of a few cases.
+- A second model (ChatGPT) re-decided the 30 disputed findings after seeing both labels, with three answers corrected
+  to the protocol. That row is shown apart below. It is not blind and not a person's check.
 - v2.1 is a fix made after reviewing that score, so it is not blind. It removes the 3 false positives and leaves
   recall unchanged.
 - On the labelled sample used while writing the rules, v2 recall was 47/50. The drop to 54/79 on new findings is the
@@ -198,6 +200,13 @@ Fixes found by an independent review after the hold-out was scored (SPEC-v2.md s
 
 - Codex labels: 35 label, 44 title, 27 body sentence, 43 none. 11 include P (Other), which no rule emits. Against the form: 84 agree, 19 disagree, 0 a_vs_b, 3 uncheckable.
 - v2 facts against the form: 55 agree, 3 disagree, 0 a_vs_b, 1 uncheckable. v2.1 facts against the form: 54 agree, 2 disagree, 0 a_vs_b, 0 uncheckable.
+
+### Second-model adjudication (not blind, not a person's check)
+A separate label set for the 30 hold-out findings where v2, Codex and the form disagree in a way that moves a score. ChatGPT decided them after seeing the v2 letters, the Codex labels and the form, so it is not blind. Claude then corrected three answers (items 1, 4 and 12) that counted body text where the protocol does not. 10 of the 149 labels change. No person has checked them. The blind row above stays the headline. Protocol and all 30 decisions: `study/adjudication/`.
+
+| rules | extracted | precision | false positives | A vs B only | recall, label or title | recall, label or title, P ignored | recall, all statements |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| v2 (frozen) against the second-model labels | 59 | 94.9% [86.1%, 98.3%] (56/59) | 3 | 0 | 73.7% [62.8%, 82.3%] (56/76) | 73.7% [62.8%, 82.3%] (56/76) | 53.8% [44.3%, 63.1%] (56/104) |
 <!-- results:end -->
 
 ## Limits
@@ -221,6 +230,7 @@ Fixes found by an independent review after the hold-out was scored (SPEC-v2.md s
   bootstrap. The labelled sample's Wilson intervals treat findings as independent.
 - The blind hold-out labels come from one AI labeller (Codex), not an auditor. The label prompt was written by the
   author of the rules and shares its reading of a few cases, so agreement on those cases is not independent.
+- On the 30 disputed findings, a second model disagreed with Codex on 9. Labels on hard cases are uncertain.
 - Proxy domain: Single Audit findings under the Uniform Guidance, not SOX.
 
 ## Layout
@@ -235,6 +245,7 @@ tools/          fetch_data.py: pinned rebuild and --verify check
 data/           pinned CSVs, labels, manifest, licence note
 docs/           DESIGN.md, REVIEW.md, index.html (the write-up page)
 study/          the blind hold-out: ids, labels, label prompt, draw script, checksums
+                adjudication/: second-model labels for 30 disputed findings, protocol and decisions
 ```
 
 ## References

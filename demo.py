@@ -21,6 +21,10 @@ FIELD_LABELS = {
 }
 SEVERITY_VALUES = ("material_weakness", "significant_deficiency")
 FORM_VALUES = ("material_weakness", "significant_deficiency", "none")
+NOTE = (
+    "ChatGPT decided them after seeing the v2 letters, the Codex labels and the form, so it is not blind. "
+    "Claude then corrected three answers (items 1, 4 and 12) that counted body text where the protocol does not."
+)
 HELDOUT_ROWS = {"v1": "v1", "v2": "v2 (frozen, blind)", "v2.1": "v2.1 (after review, not blind)"}
 
 
@@ -173,6 +177,33 @@ def _left_out(scores: dict) -> str:
     return f"Left out because their text equals a development finding's text: {', '.join(left_out)}."
 
 
+HELDOUT_HEAD = [
+    "| rules | extracted | precision | false positives | A vs B only | recall, label or title | "
+    "recall, label or title, P ignored | recall, all statements |",
+    "| --- | --- | --- | --- | --- | --- | --- | --- |",
+]
+
+
+def _heldout_row(title: str, s: dict) -> str:
+    cells = (title, str(s["extracted"]), _wilson_cell(s["precision"]), str(s["false_positive"]),
+             str(s["a_vs_b_only"]), _wilson_cell(s["recall_label_title"]),
+             _wilson_cell(s["recall_label_title_without_p"]), _wilson_cell(s["recall_all"]))  # fmt: skip
+    return "| " + " | ".join(cells) + " |"
+
+
+def _second_model_lines(scores: dict) -> list[str]:
+    second = scores["second_model"]
+    return [
+        "### Second-model adjudication (not blind, not a person's check)",
+        "A separate label set for the 30 hold-out findings where v2, Codex and the form disagree in a way that moves a "
+        "score. " + NOTE + f" {second['labels_changed']} of the {scores['findings']} labels change. No person has "
+        "checked them. The blind row above stays the headline. Protocol and all 30 decisions: `study/adjudication/`.",
+        "",
+        *HELDOUT_HEAD,
+        _heldout_row("v2 (frozen) against the second-model labels", second["v2"]),
+    ]
+
+
 def _heldout_lines(scores: dict) -> list[str]:
     where = scores["labels_where"]
     lines = [
@@ -181,16 +212,9 @@ def _heldout_lines(scores: dict) -> list[str]:
         "labelled by Codex (an OpenAI model) from the text alone, not by an auditor. "
         f"{_left_out(scores)} Scored: {scores['findings']}. Raw scores, before any human check.",
         "",
-        "| rules | extracted | precision | false positives | A vs B only | recall, label or title | "
-        "recall, label or title, P ignored | recall, all statements |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        *HELDOUT_HEAD,
     ]
-    for name, title in HELDOUT_ROWS.items():
-        s = scores[name]
-        cells = (title, str(s["extracted"]), _wilson_cell(s["precision"]), str(s["false_positive"]),
-                 str(s["a_vs_b_only"]), _wilson_cell(s["recall_label_title"]),
-                 _wilson_cell(s["recall_label_title_without_p"]), _wilson_cell(s["recall_all"]))  # fmt: skip
-        lines.append("| " + " | ".join(cells) + " |")
+    lines += [_heldout_row(title, scores[name]) for name, title in HELDOUT_ROWS.items()]
     lines += [
         "",
         f"- Codex labels: {where.get('label', 0)} label, {where.get('title', 0)} title, {where.get('prose', 0)} "
@@ -242,6 +266,8 @@ def render_block(
         lines += ["", *_v2_1_lines(metrics_v2_1)]
     if heldout is not None:
         lines += ["", *_heldout_lines(heldout)]
+        if "second_model" in heldout:
+            lines += ["", *_second_model_lines(heldout)]
     return chr(10).join(lines)
 
 

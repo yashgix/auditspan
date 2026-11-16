@@ -16,6 +16,54 @@
   "title": 44
  },
  "labels_with_p": 11,
+ "second_model": {
+  "labels_changed": 10,
+  "v2": {
+   "a_vs_b_only": 0,
+   "extracted": 59,
+   "false_positive": 3,
+   "form": {
+    "agree": 55,
+    "disagree": 3,
+    "uncheckable": 1
+   },
+   "precision": {
+    "hi": 0.982557,
+    "k": 56,
+    "lo": 0.860835,
+    "n": 59,
+    "rate": 0.949153
+   },
+   "recall_all": {
+    "hi": 0.63119,
+    "k": 56,
+    "lo": 0.442993,
+    "n": 104,
+    "rate": 0.538462
+   },
+   "recall_all_without_p": {
+    "hi": 0.659034,
+    "k": 56,
+    "lo": 0.467375,
+    "n": 99,
+    "rate": 0.565657
+   },
+   "recall_label_title": {
+    "hi": 0.822706,
+    "k": 56,
+    "lo": 0.628188,
+    "n": 76,
+    "rate": 0.736842
+   },
+   "recall_label_title_without_p": {
+    "hi": 0.822706,
+    "k": 56,
+    "lo": 0.628188,
+    "n": 76,
+    "rate": 0.736842
+   }
+  }
+ },
  "v1": {
   "a_vs_b_only": 0,
   "extracted": 9,

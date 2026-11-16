@@ -6,7 +6,16 @@ import unittest
 from findingtrace import DATA_DIR
 from findingtrace.data import Finding, Form, load
 from findingtrace.extract import requirements
-from findingtrace.heldout import HELDOUT_DIR, load_dev_ids, load_heldout, score_extractor, stated, text_hash
+from findingtrace.heldout import (
+    HELDOUT_DIR,
+    adjudicate,
+    load_decisions,
+    load_dev_ids,
+    load_heldout,
+    score_extractor,
+    stated,
+    text_hash,
+)
 
 
 def finding(text, filed):
@@ -67,3 +76,22 @@ class FilesTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AdjudicationTest(unittest.TestCase):
+    def test_applies_only_listed_ids(self):
+        labels = [label("P", "title"), {"id": "R y", "letters": "L", "where": "label", "span": ""}]
+        decisions = [{"id": "R x", "result": {"letters": "N", "where": "title"}}]
+        out = adjudicate(labels, decisions)
+        self.assertEqual((out[0]["letters"], out[0]["where"]), ("N", "title"))
+        self.assertEqual(out[1], labels[1])
+
+    def test_committed_decisions_match_the_codex_labels(self):
+        codex = {row["id"]: row for row in load_heldout()}
+        decisions = load_decisions()
+        self.assertEqual(len(decisions), 30)
+        for row in decisions:
+            blind = codex[row["id"]]
+            self.assertEqual(row["codex"], {"letters": blind["letters"], "where": blind["where"]})
+            self.assertEqual(row["changed"], row["result"] != row["codex"])
+        self.assertEqual([row["item"] for row in decisions if row["corrected_by_claude"]], [1, 4, 12])

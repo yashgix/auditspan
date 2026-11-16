@@ -14,7 +14,10 @@ def wilson(k: int, n: int) -> tuple[float, float, float]:
     denominator = 1.0 + z * z / n
     centre = (rate + z * z / (2.0 * n)) / denominator
     half = z * sqrt(rate * (1.0 - rate) / n + z * z / (4.0 * n * n)) / denominator
-    return (rate, max(0.0, centre - half), min(1.0, centre + half))
+    # The bounds are exact at the edges, so float rounding cannot move them off 0 or 1.
+    lo = 0.0 if k == 0 else max(0.0, centre - half)
+    hi = 1.0 if k == n else min(1.0, centre + half)
+    return (rate, lo, hi)
 
 
 def report_bootstrap(hits: np.ndarray, totals: np.ndarray, replicates: int, seed: int):

@@ -28,7 +28,7 @@ The 28 findings Codex labelled from body sentences only were not reviewed.
 Codes: V = v2's letters are right, C = Codex is right, O:X = the text states letters X, B = stated only in a body
 sentence, N = not stated, A = agree with v2 and Codex. V and O:X replace the letters and keep Codex's location.
 B keeps the letters and moves the location to a body sentence. N sets the label to none. C and A change nothing.
-`findingtrace/heldout.py` applies `decisions.jsonl` to the Codex labels and scores v2 against the result.
+`auditspan/heldout.py` applies `decisions.jsonl` to the Codex labels and scores v2 against the result.
 
 ## Who decided
 1. ChatGPT (OpenAI) answered all 30 items on 15 Nov 2026. It was **not blind**: for every item it saw the v2 letters,

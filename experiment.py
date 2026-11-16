@@ -1,8 +1,8 @@
-"""Run the findingtrace experiment."""
+"""Run the auditspan experiment."""
 
 import argparse
 
-from findingtrace import DATA_DIR, run
+from auditspan import DATA_DIR, run
 
 
 def main(argv=None):

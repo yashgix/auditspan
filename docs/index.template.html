@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>findingtrace</title>
+<title>auditspan</title>
 <meta name="description" content="Extracts source-linked facts from federal single-audit finding texts and checks them against the auditor's own form data, with a blind hold-out for the version 2 rules.">
 <style>
 :root { color-scheme: light; --paper:#fff; --band:#f2f7f6; --ink:#142421; --muted:#52625f; --line:#dde7e5; --accent:#0b6b5d; --accent-soft:#e3f2ef; --warn:#b45309; --code:#eef4f3;
@@ -59,9 +59,9 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
 
 <header class="wrap"><div class="col stack">
   <p class="eyebrow">Federal Audit Clearinghouse, single-audit findings</p>
-  <h1>findingtrace</h1>
+  <h1>auditspan</h1>
   <p class="lede">Reads the free text of federal single-audit findings, extracts four facts with the exact characters each came from, and checks them against the structured form the same auditor filed.</p>
-  <p class="small muted"><a href="https://github.com/yashgix/findingtrace">github.com/yashgix/findingtrace</a></p>
+  <p class="small muted"><a href="https://github.com/yashgix/auditspan">github.com/yashgix/auditspan</a></p>
 </div></header>
 
 <section class="wrap"><div class="col stack">
@@ -87,7 +87,7 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
 <section class="wrap"><div class="col stack">
   <h2>The problem</h2>
   <p>A US organisation that spends $750,000 or more of federal awards in a fiscal year ($1,000,000 for fiscal years from 1 October 2024) must get a single audit. For each finding the auditor writes free text and also files structured flags on form SF-SAC: material weakness or significant deficiency, repeat finding, questioned costs, and the compliance requirement concerned. The same auditor wrote both, so they should agree. When they do not, a reader needs to see both sides and the words behind the claim.</p>
-  <p>findingtrace lists every disagreement with the quote and the form value side by side. Accuracy is measured on labelled samples, not asserted.</p>
+  <p>auditspan lists every disagreement with the quote and the form value side by side. Accuracy is measured on labelled samples, not asserted.</p>
   <div class="example stack">{{example}}</div>
 </div></section>
 

@@ -5,11 +5,11 @@ from pathlib import Path
 
 import numpy as np
 
-from findingtrace.compare import agrees, compare, form_value, outcome
-from findingtrace.data import Finding, Form, load, make_form
-from findingtrace.extract import FIELDS, extract, questioned_costs, repeat, requirements, severity
-from findingtrace.labels import evaluate
-from findingtrace.stats import report_bootstrap, wilson
+from auditspan.compare import agrees, compare, form_value, outcome
+from auditspan.data import Finding, Form, load, make_form
+from auditspan.extract import FIELDS, extract, questioned_costs, repeat, requirements, severity
+from auditspan.labels import evaluate
+from auditspan.stats import report_bootstrap, wilson
 
 TEXT_COLUMNS = ["report_id", "auditee_uei", "audit_year", "fac_accepted_date", "finding_ref_number",
                 "contains_chart_or_table", "finding_text"]  # fmt: skip

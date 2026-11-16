@@ -4,11 +4,11 @@ import argparse
 import json
 from pathlib import Path
 
-from findingtrace import DATA_DIR
-from findingtrace.compare import compare, form_value, verdict
-from findingtrace.data import load
-from findingtrace.extract import FIELDS
-from findingtrace.labels import load_labels
+from auditspan import DATA_DIR
+from auditspan.compare import compare, form_value, verdict
+from auditspan.data import load
+from auditspan.extract import FIELDS
+from auditspan.labels import load_labels
 
 START = "<!-- results:start -->"
 END = "<!-- results:end -->"

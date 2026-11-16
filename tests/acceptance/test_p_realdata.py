@@ -9,16 +9,16 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import findingtrace
-from findingtrace import run
-from findingtrace.__main__ import main as cli
-from findingtrace.compare import compare
-from findingtrace.data import load
-from findingtrace.extract import FIELDS
-from findingtrace.labels import evaluate, load_labels
-from findingtrace.sample import disagreement_keys, random_keys
+import auditspan
+from auditspan import run
+from auditspan.__main__ import main as cli
+from auditspan.compare import compare
+from auditspan.data import load
+from auditspan.extract import FIELDS
+from auditspan.labels import evaluate, load_labels
+from auditspan.sample import disagreement_keys, random_keys
 
-REPO = Path(findingtrace.__file__).resolve().parent.parent
+REPO = Path(auditspan.__file__).resolve().parent.parent
 PER_FIELD = ("covered", "agree", "disagree", "disagree_reports", "disagree_rate", "disagree_rate_lo",
              "disagree_rate_hi", "form_varies", "extracted", "correct", "stated", "found", "flagged", "confirmed",
              "precision", "precision_lo", "precision_hi", "recall", "recall_lo", "recall_hi", "flag_precision",
@@ -51,10 +51,10 @@ class RealData(unittest.TestCase):
         cls.results = {f.key: compare(f) for f in cls.corpus.findings}
 
     def test_data_matches_the_manifest(self):
-        manifest = json.loads((findingtrace.DATA_DIR / "MANIFEST.json").read_text())
+        manifest = json.loads((auditspan.DATA_DIR / "MANIFEST.json").read_text())
         self.assertEqual(sorted(manifest["files"]), ["findings.csv", "findings_text.csv", "labels.json"])
         for name, entry in manifest["files"].items():
-            digest = hashlib.sha256((findingtrace.DATA_DIR / name).read_bytes()).hexdigest()
+            digest = hashlib.sha256((auditspan.DATA_DIR / name).read_bytes()).hexdigest()
             self.assertEqual(digest, entry["sha256"], name)
 
     def test_fetch_verify_needs_no_network(self):
@@ -74,7 +74,7 @@ class RealData(unittest.TestCase):
         self.assertEqual(first.key, ("2017-06-GSAFAC-0000375278", "2017-001"))
         self.assertEqual(last.key, ("2025-06-GSAFAC-0000392542", "2025-001"))
         self.assertEqual(first.audit_year, 2017)
-        with open(findingtrace.DATA_DIR / "findings_text.csv", newline="", encoding="utf-8") as f:
+        with open(auditspan.DATA_DIR / "findings_text.csv", newline="", encoding="utf-8") as f:
             csv.field_size_limit(sys.maxsize)
             row = next(csv.DictReader(f))
         self.assertEqual(first.text, row["finding_text"])
@@ -134,7 +134,7 @@ class RealData(unittest.TestCase):
             self.assertEqual(strata[field], drawn[field], field)
 
     def test_labels_file(self):
-        doc = json.loads((findingtrace.DATA_DIR / "labels.json").read_text(encoding="utf-8"))
+        doc = json.loads((auditspan.DATA_DIR / "labels.json").read_text(encoding="utf-8"))
         self.assertIn("not an auditor", doc["labeller"])
         self.assertEqual(len(doc["findings"]), 148)
         for r in doc["findings"]:
@@ -190,7 +190,7 @@ class Experiment(unittest.TestCase):
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
         cls.out = Path(cls.tmp.name) / "results" / "metrics.json"
-        run.main(findingtrace.DATA_DIR, cls.out)
+        run.main(auditspan.DATA_DIR, cls.out)
         cls.text = cls.out.read_text()
         cls.m = json.loads(cls.text)
 
@@ -208,7 +208,7 @@ class Experiment(unittest.TestCase):
 
     def test_main_writes_identical_sorted_numbers(self):
         again = Path(self.tmp.name) / "again.json"
-        run.main(findingtrace.DATA_DIR, again)
+        run.main(auditspan.DATA_DIR, again)
         self.assertEqual(again.read_text(), self.text)
         self.assertEqual(self.text, json.dumps(self.m, sort_keys=True, indent=1) + "\n")
 

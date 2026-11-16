@@ -1,9 +1,9 @@
-"""Tests for findingtrace.requirements_v2 (SPEC-v2)."""
+"""Tests for auditspan.requirements_v2 (SPEC-v2)."""
 
 import unittest
 
-from findingtrace.extract import requirements
-from findingtrace.requirements_v2 import letters_v2, requirements_v2
+from auditspan.extract import requirements
+from auditspan.requirements_v2 import letters_v2, requirements_v2
 
 
 def value(text):

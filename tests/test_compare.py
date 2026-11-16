@@ -1,8 +1,8 @@
-"""Tests for findingtrace.compare."""
+"""Tests for auditspan.compare."""
 
 import unittest
 
-from findingtrace.compare import (
+from auditspan.compare import (
     FORM_COLUMNS,
     OUTCOMES,
     OUTCOMES_V2,
@@ -12,8 +12,8 @@ from findingtrace.compare import (
     outcome,
     requirements_verdict,
 )
-from findingtrace.data import Finding, Form
-from findingtrace.extract import FIELDS, Fact
+from auditspan.data import Finding, Form
+from auditspan.extract import FIELDS, Fact
 
 
 def make_form(

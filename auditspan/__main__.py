@@ -1,4 +1,4 @@
-"""Command line interface for findingtrace."""
+"""Command line interface for auditspan."""
 
 import argparse
 import csv
@@ -31,7 +31,7 @@ def _text(value: str | bool) -> str:
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="python -m findingtrace")
+    parser = argparse.ArgumentParser(prog="python -m auditspan")
     parser.add_argument("--data", default=DATA_DIR)
     subparsers = parser.add_subparsers(dest="command", required=True)
 

@@ -1,10 +1,10 @@
-"""Tests for findingtrace.stats."""
+"""Tests for auditspan.stats."""
 
 import unittest
 
 import numpy as np
 
-from findingtrace.stats import report_bootstrap, wilson
+from auditspan.stats import report_bootstrap, wilson
 
 
 class WilsonTest(unittest.TestCase):

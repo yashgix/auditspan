@@ -1,11 +1,11 @@
-"""Tests for findingtrace.extract."""
+"""Tests for auditspan.extract."""
 
 import unittest
 from dataclasses import FrozenInstanceError
 
-from findingtrace import DATA_DIR
-from findingtrace.data import load
-from findingtrace.extract import (
+from auditspan import DATA_DIR
+from auditspan.data import load
+from auditspan.extract import (
     FIELDS,
     MAX_VALUE,
     Fact,

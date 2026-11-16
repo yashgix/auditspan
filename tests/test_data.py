@@ -1,4 +1,4 @@
-"""Tests for findingtrace.data."""
+"""Tests for auditspan.data."""
 
 import csv
 import tempfile
@@ -6,8 +6,8 @@ import unittest
 from dataclasses import FrozenInstanceError
 from pathlib import Path
 
-from findingtrace import DATA_DIR
-from findingtrace.data import Corpus, Finding, Form, load, make_form
+from auditspan import DATA_DIR
+from auditspan.data import Corpus, Finding, Form, load, make_form
 
 TEXT_FILE = DATA_DIR / "findings_text.csv"
 FORM_FILE = DATA_DIR / "findings.csv"

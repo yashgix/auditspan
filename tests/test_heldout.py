@@ -1,12 +1,12 @@
-"""Tests for findingtrace.heldout."""
+"""Tests for auditspan.heldout."""
 
 import hashlib
 import unittest
 
-from findingtrace import DATA_DIR
-from findingtrace.data import Finding, Form, load
-from findingtrace.extract import requirements
-from findingtrace.heldout import (
+from auditspan import DATA_DIR
+from auditspan.data import Finding, Form, load
+from auditspan.extract import requirements
+from auditspan.heldout import (
     HELDOUT_DIR,
     adjudicate,
     load_decisions,

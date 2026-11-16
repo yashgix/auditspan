@@ -1,4 +1,4 @@
-"""Tests for the findingtrace command line."""
+"""Tests for the auditspan command line."""
 
 import csv
 import io
@@ -8,7 +8,7 @@ import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from findingtrace.__main__ import CSV_COLUMNS, main
+from auditspan.__main__ import CSV_COLUMNS, main
 
 TEXT_HEADER = ["report_id", "audit_year", "finding_ref_number", "finding_text"]
 FORM_HEADER = [

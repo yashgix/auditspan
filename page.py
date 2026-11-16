@@ -6,12 +6,12 @@ import json
 import re
 from pathlib import Path
 
+from auditspan import DATA_DIR
+from auditspan.compare import form_value
+from auditspan.data import load
+from auditspan.extract import FIELDS
+from auditspan.labels import load_labels
 from demo import HELDOUT_ROWS, SEVERITY_VALUES, _first_confirmed, _interval, _pct
-from findingtrace import DATA_DIR
-from findingtrace.compare import form_value
-from findingtrace.data import load
-from findingtrace.extract import FIELDS
-from findingtrace.labels import load_labels
 
 ROOT = Path(__file__).resolve().parent
 FIELD_NAMES = dict(zip(FIELDS, ("severity", "repeat", "questioned costs", "requirements"), strict=True))

@@ -1,9 +1,11 @@
-# findingtrace
+# auditspan
 
 **Evidence-linked extraction you can audit.** Every fact the tool reports points at the exact characters it came
 from, and its error rate is reported with intervals rather than claimed.
 
-Write-up with the figures: https://yashgix.github.io/findingtrace/
+Write-up with the figures: https://yashgix.github.io/auditspan/
+
+Renamed from `findingtrace` on 16 Nov 2026. Frozen specs and git tags keep the old name.
 
 ## Main result
 
@@ -30,7 +32,7 @@ costs — and files the same finding as structured flags on form SF-SAC: materia
 repeat finding, questioned costs, and the compliance requirement concerned. The text and the form are written by the
 same auditor about the same finding, so they should agree.
 
-findingtrace reads the text with plain deterministic rules, extracts those four facts, keeps the character span that
+auditspan reads the text with plain deterministic rules, extracts those four facts, keeps the character span that
 states each one, compares each fact with the filed form, and lists every disagreement with the quote and the form
 value side by side. Accuracy is measured on a labelled sample, not asserted.
 
@@ -42,14 +44,14 @@ findings that also carries auditor-filed flags to check the text against.
 
 ## What is here
 
-- `findingtrace/extract.py` — rule-based extraction of the four facts, each with an exact span.
-- `findingtrace/compare.py` — text value versus form value per finding, with outcome `silent`, `agree` or `disagree`.
-- `findingtrace/data.py` — loads the pinned CSVs and aggregates the per-award form rows into one form per finding.
-- `findingtrace/sample.py`, `findingtrace/labels.py`, `findingtrace/stats.py` — the labelled sample, its scoring,
+- `auditspan/extract.py` — rule-based extraction of the four facts, each with an exact span.
+- `auditspan/compare.py` — text value versus form value per finding, with outcome `silent`, `agree` or `disagree`.
+- `auditspan/data.py` — loads the pinned CSVs and aggregates the per-award form rows into one form per finding.
+- `auditspan/sample.py`, `auditspan/labels.py`, `auditspan/stats.py` — the labelled sample, its scoring,
   Wilson intervals and a report-level bootstrap.
-- `findingtrace/run.py`, `experiment.py` — the metrics and the JSON they are written to.
+- `auditspan/run.py`, `experiment.py` — the metrics and the JSON they are written to.
 - `docs/DESIGN.md` is the v1 design. `SPEC-v2.md` lists what version 2 changes and why.
-- `python -m findingtrace disagreements` — the main output: a CSV of disagreements, each row putting the auditor's
+- `python -m auditspan disagreements` — the main output: a CSV of disagreements, each row putting the auditor's
   own words next to what the same auditor filed.
 
 ## Run it
@@ -72,8 +74,8 @@ repository, so neither the tests nor the experiment touch the network.
 ### Command line
 
 ```
-python -m findingtrace show REPORT_ID REF
-python -m findingtrace disagreements [--field severity|repeat|questioned_costs|requirements] [--out PATH]
+python -m auditspan show REPORT_ID REF
+python -m auditspan disagreements [--field severity|repeat|questioned_costs|requirements] [--out PATH]
 ```
 
 `show` prints one finding's four facts as JSON — each with `field`, `value`, `start`, `end` and `quote` — plus the form
@@ -236,7 +238,7 @@ A separate label set for the 30 hold-out findings where v2, Codex and the form d
 ## Layout
 
 ```
-findingtrace/   package: data, extract, compare, stats, sample, labels, run, __main__
+auditspan/      package: data, extract, compare, stats, sample, labels, run, __main__
 tests/          unittest suite, one module per package module
 demo.py         renders the results block and the summary line
 experiment.py   writes the JSON files in results/

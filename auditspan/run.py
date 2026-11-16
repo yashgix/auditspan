@@ -1,4 +1,4 @@
-"""Experiment metrics for findingtrace."""
+"""Experiment metrics for auditspan."""
 
 import json
 from pathlib import Path

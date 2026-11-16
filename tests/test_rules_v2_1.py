@@ -1,10 +1,10 @@
-"""Tests for findingtrace.rules_v2_1 (SPEC-v2 section 6)."""
+"""Tests for auditspan.rules_v2_1 (SPEC-v2 section 6)."""
 
 import unittest
 
-from findingtrace.extract import questioned_costs, repeat
-from findingtrace.requirements_v2 import requirements_v2
-from findingtrace.rules_v2_1 import extract_v2_1, requirements_v2_1
+from auditspan.extract import questioned_costs, repeat
+from auditspan.requirements_v2 import requirements_v2
+from auditspan.rules_v2_1 import extract_v2_1, requirements_v2_1
 
 
 def value(fact):

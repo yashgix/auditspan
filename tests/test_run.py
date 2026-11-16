@@ -1,13 +1,13 @@
-"""Tests for findingtrace.run."""
+"""Tests for auditspan.run."""
 
 import json
 import tempfile
 import unittest
 from pathlib import Path
 
-from findingtrace import DATA_DIR, run
-from findingtrace.data import Corpus, Finding, Form
-from findingtrace.extract import FIELDS
+from auditspan import DATA_DIR, run
+from auditspan.data import Corpus, Finding, Form
+from auditspan.extract import FIELDS
 
 _NUMBERS = (
     "text_rows",

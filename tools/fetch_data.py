@@ -39,7 +39,7 @@ def subset(source, target):
 
 def download(table, folder):
     path = Path(folder) / f"{table}.csv"
-    request = urllib.request.Request(SOURCE.format(table=table), headers={"User-Agent": "findingtrace fetch"})
+    request = urllib.request.Request(SOURCE.format(table=table), headers={"User-Agent": "auditspan fetch"})
     with urllib.request.urlopen(request, timeout=300) as response, open(path, "wb") as out:
         while chunk := response.read(1 << 20):
             out.write(chunk)

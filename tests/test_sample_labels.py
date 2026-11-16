@@ -1,12 +1,12 @@
-"""Tests for findingtrace.sample and findingtrace.labels."""
+"""Tests for auditspan.sample and auditspan.labels."""
 
 import unittest
 
-from findingtrace import DATA_DIR
-from findingtrace.data import Finding, Form
-from findingtrace.extract import FIELDS
-from findingtrace.labels import evaluate, load_labels
-from findingtrace.sample import PER_FIELD, RANDOM_SIZE, disagreement_keys, random_keys
+from auditspan import DATA_DIR
+from auditspan.data import Finding, Form
+from auditspan.extract import FIELDS
+from auditspan.labels import evaluate, load_labels
+from auditspan.sample import PER_FIELD, RANDOM_SIZE, disagreement_keys, random_keys
 
 LABELS_FILE = DATA_DIR / "labels.json"
 

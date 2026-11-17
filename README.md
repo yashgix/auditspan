@@ -5,32 +5,31 @@ from, and its error rate is reported with intervals rather than claimed.
 
 Write-up with the figures: https://yashgix.github.io/auditspan/
 
-Renamed from `findingtrace` on 16 Nov 2026. Frozen files and git tags keep the old name.
-
 ## Main result
 
 On 149 blind findings (one duplicate of a development text left out), the v2 requirement rules recall 54/79 = 68.4% of
 the requirements the text states in a label or title, against 9/79 = 11.4% for v1, with precision 54/59 = 91.5%.
 
-- The labels come from an independent model labeller (Codex) and have not been checked by a person yet. The label
-  prompt's examples share the rule writer's reading of a few cases.
-- A second model (ChatGPT) re-decided the 30 disputed findings after seeing both labels, with three answers corrected
-  to the protocol. That row is shown apart below. It is not blind and not a person's check.
+- The labels come from Codex, an OpenAI model, labelling blind from the text alone. No person has checked them yet.
+  The label prompt's examples share the rule writer's reading of a few cases.
+- A second model (ChatGPT) re-decided the 30 disputed findings after seeing the v2 letters, the Codex labels and the
+  form, and Claude corrected three of its answers to the protocol. That row is shown apart below. It is not blind and
+  not a person's check.
 - v2.1 is a fix made after reviewing that score, so it is not blind. It removes the 3 false positives and leaves
   recall unchanged.
 - On the labelled sample used while writing the rules, v2 recall was 47/50. The drop to 54/79 on new findings is the
-  honest number.
+  real out-of-sample result.
 - A versus B differences (auditors file either letter for tests done together) are reported separately.
 - A federal Single Audit is a stand-in for SOX evidence, which is private. Nothing here is a SOX result.
 
 ## The question
 
 A US organisation that spends $750,000 or more of federal awards in a fiscal year must obtain a Single Audit
-($1,000,000 for fiscal years beginning on or after 1 October 2024, 2 CFR 200.501. Most audits in this dataset cover
-earlier fiscal years.) For each finding the auditor writes free text — condition, criteria, cause, effect, questioned
-costs — and files the same finding as structured flags on form SF-SAC: material weakness or significant deficiency, a
-repeat finding, questioned costs, and the compliance requirement concerned. The text and the form are written by the
-same auditor about the same finding, so they should agree.
+($1,000,000 for fiscal years beginning on or after 1 October 2024, per 2 CFR 200.501). Most audits in this dataset
+cover earlier fiscal years. For each finding the auditor writes free text (condition, criteria, cause, effect,
+questioned costs) and files the same finding as structured flags on form SF-SAC: material weakness or significant
+deficiency, a repeat finding, questioned costs, and the compliance requirement concerned. The text and the form are
+written by the same auditor about the same finding, so they should agree.
 
 auditspan reads the text with plain deterministic rules, extracts those four facts, keeps the character span that
 states each one, compares each fact with the filed form, and lists every disagreement with the quote and the form
@@ -59,7 +58,7 @@ findings that also carries auditor-filed flags to check the text against.
 Python 3.14, the standard library plus NumPy. From the repository root:
 
 ```
-make test        # own and v1 acceptance tests. Tests that need data/ skip with a clear message when it is missing
+make test        # unit and v1 acceptance tests (tests that need data/ skip with a message if it is missing)
 make lint        # ruff check and ruff format --check
 make experiment  # writes results/metrics.json (v1), metrics_v2.json, metrics_v2_1.json and heldout.json
 make page        # rebuilds docs/index.html from results/
@@ -78,7 +77,7 @@ python -m auditspan show REPORT_ID REF
 python -m auditspan disagreements [--field severity|repeat|questioned_costs|requirements] [--out PATH]
 ```
 
-`show` prints one finding's four facts as JSON — each with `field`, `value`, `start`, `end` and `quote` — plus the form
+`show` prints one finding's four facts as JSON, each with `field`, `value`, `start`, `end` and `quote`, plus the form
 values and the outcomes. `disagreements` writes a CSV with the columns `report_id, ref, field, text_value,
 form_value, start, end, quote`, findings in load order and fields in the fixed order
 `severity, repeat, questioned_costs, requirements`.
@@ -86,24 +85,21 @@ form_value, start, end, quote`, findings in load order and fields in the fixed o
 ## Data and licenses
 
 `data/findings_text.csv` (8,772 rows) and `data/findings.csv` (21,183 rows) hold every row of the FAC's 2025
-`findings_text` and `findings` files — what the FAC accepted in calendar 2025 — whose `fac_accepted_date` falls from
+`findings_text` and `findings` files (what the FAC accepted in calendar 2025) whose `fac_accepted_date` falls from
 2025-07-01 to 2025-12-31, in upstream order. `data/labels.json` is the labelled sample, original to this repository.
 `data/MANIFEST.json` records the sha256 and size of all three files, and `data/LICENSE-FAC.md` quotes the terms.
 
-The FAC states: "The data collected by the FAC is free to use and in the public domain" (fac.gov/data, read
-2026-11-14). The FAC is run by the U.S. General Services Administration. The findings are written by independent
-auditors in Single Audit reports, not in SOX audits.
-
-Terms, checked on fac.gov on 15 Nov 2026: the FAC says its data "is free to use and in the public domain", so the two
-CSV files may be redistributed here. No data was removed from the history because of licensing.
+The FAC states: "The data collected by the FAC is free to use and in the public domain" (fac.gov/data, read 14 Nov
+2026 and again 15 Nov 2026), so the two CSV files are redistributed here. The FAC is run by the U.S. General Services
+Administration. The findings are written by independent auditors in Single Audit reports, not in SOX audits.
 
 The letter key for compliance requirements, quoted in `study/heldout/LABEL-PROMPT.md`, comes from Form SF-SAC (the
 federal Single Audit data collection form) as published by the New Mexico Department of Finance and Administration:
 https://www.nmdfa.state.nm.us/wp-content/uploads/2026/04/SF-SAC-Data-Collection-Form-for-Single-Audits.pdf. The form
 is a US federal government form and its short key is quoted here as a source note, not redistributed as a file.
 
-Our code is MIT (`LICENSE`). `data/labels.json`, `study/heldout/` and the other files written for this repository are
-under the same licence. The only dependency is NumPy (BSD), with ruff (MIT) for linting.
+The code is MIT (`LICENSE`). `data/labels.json`, `study/heldout/` and the other files written for this repository are
+under the same license. The only dependency is NumPy (BSD), with ruff (MIT) for linting.
 
 To rebuild or check the pinned files:
 
@@ -116,10 +112,10 @@ The FAC adds and amends records, so a later download may differ. The manifest sa
 
 ## Results
 
-The block below is rendered from the JSON files in `results/` and from `data/`. No number in it is typed by hand. Re-render it
-with `python demo.py --readme README.md --out README.md` after re-running the experiment.
+The block below is rendered from the JSON files in `results/` and from `data/`. No number in it is typed by hand.
+Re-render it with `python demo.py --readme README.md --out README.md` after re-running the experiment.
 
-Read the per-field lines carefully: `9 form rows differ` counts **findings**, not rows — the findings whose filed
+Read the per-field lines carefully: `9 form rows differ` counts **findings**, not rows: the findings whose filed
 form rows do not agree with each other on that field. A finding filed against several awards has several form rows.
 This number counts that finding once. It is the `form_varies` metric: a property of the form as filed, not an error of
 the text and not a count of rows.
@@ -131,18 +127,18 @@ checks the surrounding text.
 
 Version 2 changes only the requirements field (see `SPEC-v2.md`). It also reads the finding's title line, more label
 wordings and explicit letter codes, and it fixes misreads of v1. It stops counting two kinds of difference as
-disagreements. One kind is A versus B: "activities allowed or unallowed" and "allowable
-costs" are often tested together, and auditors file either letter. The other is a form that says P ("Other"), which the
-text cannot be checked against. The v1 numbers stay as they were, and the v1 example table shows each example's
+disagreements. One kind is A versus B: "activities allowed or unallowed" and "allowable costs" are often tested
+together, and auditors file either letter. The other is a form that says P ("Other"), which the text cannot be checked
+against. The v1 numbers stay as they were, and the v1 example table shows each example's
 version 2 outcome. The version 2 lines come from `results/metrics_v2.json`.
 
 The version 2 requirements rules were frozen at the git tag `v2-rules-frozen`. Then 150 new findings were drawn at
 random from those not looked at while writing the rules, and labelled blind by Codex, an OpenAI model. One of them
 has the same text as a finding looked at during development, so it is left out. The frozen v2 row of the blind
-hold-out is the honest measure of version 2. Version 2.1 holds fixes found by a review after that score, so its
-row is not blind. The labels' own limits are in `SPEC-v2.md` section 5:
-the label prompt shares the rule writer's reading of a few cases, and no person has checked the labels yet. The ids,
-labels, prompt and draw script are in `study/heldout/` with checksums.
+hold-out is the out-of-sample measure of version 2. Version 2.1 holds fixes made after reading the hold-out errors,
+so its row is not blind. The labels' own limits are in `SPEC-v2.md` section 5: the label prompt shares the rule
+writer's reading of a few cases, and no person has checked the labels yet. The ids, labels, prompt and draw script are
+in `study/heldout/` with checksums.
 
 <!-- results:start -->
 Corpus: 6271 findings in 3293 reports, from 8772 text rows and 21183 form rows. 151 split texts and 396 form-only findings are left out. Cited facts: 9503, of which 9503 are an exact copy of their source span (this checks the copying, not that each quote supports its fact).
@@ -186,7 +182,7 @@ Labelled sample, version 2. The version 2 rules were written while reading this 
 | requirements | 2023-09-GSAFAC-0000374131 2023-003 | ABE | E | Compliance Requirement: Eligibility and Allowable Activities/Costs |
 
 ### Version 2.1, after review (not blind)
-Fixes found by an independent review after the hold-out was scored (SPEC-v2.md section 6). Its hold-out row below is therefore not blind. Severity is as in version 1.
+Fixes found by reviewing the code and the hold-out errors after the hold-out was scored (SPEC-v2.md section 6). Its hold-out row below is therefore not blind. Severity is as in version 1.
 - repeat: 2474 covered, 2452 agree, 22 disagree (0.9% [0.5%, 1.4%]) in 19 reports, 26 form rows differ.
 - questioned costs: 3474 covered, 3437 agree, 37 disagree (1.1% [0.7%, 1.5%]) in 32 reports, 17 form rows differ.
 - requirements: 2445 covered, 2268 agree, 83 disagree (3.4% [2.6%, 4.3%]) in 71 reports, 33 form rows differ.
@@ -213,16 +209,17 @@ A separate label set for the 30 hold-out findings where v2, Codex and the form d
 
 ## Limits
 
-- Labels are by one AI labeller (Claude) from the text alone, not by an auditor, and were not double-checked by a
-  person. A disagreement means the text and the form differ. It does not say which one is wrong.
+- The labelled sample in `data/labels.json` is by one AI labeller (Claude, an Anthropic model) from the text alone,
+  not by an auditor, and no person has checked it. A disagreement means the text and the form differ. It does not
+  say which one is wrong.
 - The rules were tuned while reading about 80 flagged disagreements with form values visible, in the same session that
   later labelled the disagreement strata. `flag_precision` is therefore not an out-of-sample measure. Only the random
   stratum is, and about 2 of its 100 findings may overlap those read during development.
 - Rules miss facts stated in unusual ways. Recall is reported per field and is low for requirements, where only
   labelled lines are read. Version 2 also reads title lines, but its rules were written while reading the random
-  labelled sample, so its scores there are in-sample. The blind hold-out above is the measure on new findings. Multi-part findings (a
-  different severity per part) and one text covering two findings are known error sources for severity and
-  requirements.
+  labelled sample, so its scores there are in-sample. The blind hold-out above is the measure on new findings.
+  Multi-part findings (a different severity per part) and one text covering two findings are known error sources for
+  severity and requirements.
 - Questioned costs under the $25,000 reporting threshold are skipped when the text says so. A small stated amount with
   the form saying "no" is still listed, though the threshold may explain it.
 - `form_varies` counts findings, not rows: a finding filed against three awards whose flags disagree counts once. It
@@ -232,20 +229,22 @@ A separate label set for the 30 hold-out findings where v2, Codex and the form d
   bootstrap. The labelled sample's Wilson intervals treat findings as independent.
 - The blind hold-out labels come from one AI labeller (Codex), not an auditor. The label prompt was written by the
   author of the rules and shares its reading of a few cases, so agreement on those cases is not independent.
-- On the 30 disputed findings, a second model disagreed with Codex on 9. Labels on hard cases are uncertain.
+- On the 30 disputed findings, ChatGPT disagreed with Codex on 9, and 10 labels differ after the three corrections.
+  Labels on hard cases are uncertain.
 - Proxy domain: Single Audit findings under the Uniform Guidance, not SOX.
 
 ## Layout
 
 ```
-auditspan/      package: data, extract, compare, stats, sample, labels, run, __main__
-tests/          unittest suite, one module per package module
+auditspan/      package: data, extract, compare, stats, sample, labels, run, requirements_v2, rules_v2_1,
+                heldout, __main__
+tests/          unittest suite, and the v1 acceptance tests in tests/acceptance/
 demo.py         renders the results block and the summary line
 experiment.py   writes the JSON files in results/
 page.py         builds docs/index.html from results/ and data/
 tools/          fetch_data.py: pinned rebuild and --verify check
-data/           pinned CSVs, labels, manifest, licence note
-docs/           DESIGN.md, REVIEW.md, index.html (the write-up page)
+data/           pinned CSVs, labels, manifest, license note
+docs/           DESIGN.md, index.html (the write-up page)
 study/          the blind hold-out: ids, labels, label prompt, draw script, checksums
                 adjudication/: second-model labels for 30 disputed findings, protocol and decisions
 ```
@@ -255,8 +254,6 @@ study/          the blind hold-out: ids, labels, label prompt, draw script, chec
 - 2 CFR 200.501 and Subpart F, eCFR (the Single Audit requirement).
 - FAC public data downloads: https://www.fac.gov/data/download/
 
-## Licence
+## License
 
 MIT, see `LICENSE`. Data terms are in "Data and licenses" above.
-
-Built with Arcturus (Claude Code builders, Codex review). The labels are model-made and not yet checked by a person.

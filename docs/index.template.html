@@ -51,18 +51,50 @@ th { background:var(--band); color:var(--muted); font-weight:500; }
 td { font-variant-numeric:tabular-nums; }
 tr:last-child td { border-bottom:0; }
 footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
+h3 { font-size:1.0625rem; font-weight:600; }
+.wide { max-width:980px; margin-inline:auto; }
+:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+.bar { position:sticky; top:0; z-index:5; background:rgba(255,255,255,.94); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+.bar-in { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding-block:.6rem; }
+.brand { font-family:var(--mono); }
+.tabs { display:flex; gap:.25rem; }
+.bar-in .tabs { margin-left:auto; }
+.tabs button { font:inherit; font-size:.875rem; font-weight:500; border:0; background:transparent; color:var(--muted); padding:.4rem .8rem; border-radius:999px; cursor:pointer; }
+.tabs button[aria-selected="true"] { background:var(--accent-soft); color:var(--accent); }
+.gh { font-size:.875rem; font-weight:600; text-decoration:none; white-space:nowrap; color:var(--accent); border:1px solid var(--accent); border-radius:999px; padding:.3rem .8rem; }
+.gh:hover { background:var(--accent-soft); }
+.btn { display:inline-flex; align-items:center; gap:.4rem; font:inherit; font-weight:500; padding:.55rem 1rem; border-radius:999px; border:1px solid var(--accent); color:var(--accent); background:var(--paper); cursor:pointer; }
+pre { margin:0; background:var(--band); border:1px solid var(--line); border-radius:8px; padding:.9rem 1rem; overflow-x:auto; font-family:var(--mono); font-size:.82rem; line-height:1.6; }
+@media (max-width:760px) { .brand { display:none; } .tabs button { padding:.4rem .55rem; } .gh { padding:.3rem .6rem; } }
 @media (max-width:560px) { .b { grid-template-columns:minmax(0,1fr); gap:.25rem; } }
 @media (min-width:700px) { .tiles { grid-template-columns:repeat(4,minmax(0,1fr)); } }
 </style>
 </head>
 <body>
 
+<div class="bar wrap"><div class="wide bar-in">
+  <span class="brand">auditspan</span>
+  <div class="tabs" role="tablist" aria-label="View">
+    <button role="tab" id="tab-overview" aria-controls="overview" aria-selected="true" data-view="overview">Overview</button>
+    <button role="tab" id="tab-details" aria-controls="details" aria-selected="false" data-view="details">Technical details</button>
+  </div>
+  <a class="gh" href="https://github.com/yashgix/auditspan" target="_blank" rel="noopener">GitHub ↗</a>
+</div></div>
+
+<main id="overview" role="tabpanel" aria-labelledby="tab-overview">
 <header class="wrap"><div class="col stack">
   <p class="eyebrow">Federal Audit Clearinghouse, single-audit findings</p>
   <h1>auditspan</h1>
   <p class="lede">Reads the free text of federal single-audit findings, extracts four facts with the exact characters each came from, and checks them against the structured form the same auditor filed.</p>
   <p class="small muted"><a href="https://github.com/yashgix/auditspan">github.com/yashgix/auditspan</a></p>
 </div></header>
+
+<section class="wrap"><div class="col stack">
+  <h2>The question</h2>
+  <p>A US organisation that spends $750,000 or more of federal awards in a fiscal year ($1,000,000 for fiscal years from 1 October 2024) must get a single audit. For each finding the auditor writes free text and also files structured flags on form SF-SAC: material weakness or significant deficiency, repeat finding, questioned costs, and the compliance requirement concerned. The same auditor wrote both, so they should agree. When they do not, a reader needs to see both sides and the words behind the claim.</p>
+  <p>auditspan lists every disagreement with the quote and the form value side by side. Accuracy is measured on labelled samples, not asserted.</p>
+  <div class="example stack">{{example}}</div>
+</div></section>
 
 <section class="wrap"><div class="col stack">
   <h2>The headline, with its qualifiers</h2>
@@ -72,23 +104,18 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
     <div class="tile"><span class="big">{{v2_precision}}</span><span class="small muted">v2 precision ({{v2_precision_frac}})</span></div>
     <div class="tile"><span class="big warn">{{in_sample_frac}}</span><span class="small muted">v2 recall in-sample, before the blind test</span></div>
   </div>
+  <div class="bars">{{bars}}</div>
+  <p class="small muted">Recall of requirements stated in a label or title, on the blind findings.</p>
   <div class="callout stack">
     <p>On {{blind_n}} blind findings (one duplicate of a development text left out), v2 finds {{v2_recall_frac}} of the requirements the text states in a label or title, against {{v1_recall_frac}} for v1, with precision {{v2_precision_frac}}.</p>
     <ul>
-      <li>The labels come from an independent model labeller (Codex) and have not been checked by a person yet. The label prompt's examples share the rule writer's reading of a few cases.</li>
-      <li>A second model re-decided the 30 disputed findings after seeing both labels. That row is shown apart, and it is not blind.</li>
+      <li>The labels come from Codex, an OpenAI model, labelling blind from the text alone. No person has checked them yet. The label prompt's examples share the rule writer's reading of a few cases.</li>
+      <li>A second model re-decided the 30 disputed findings after seeing the v2 letters, the Codex labels and the form. That row is shown apart, and it is not blind.</li>
       <li>v2.1 came from a review after the score, so it is not blind. It removes the {{v2_false_positive}} false positives and leaves recall unchanged.</li>
-      <li>In-sample v2 recall was {{in_sample_frac}}. The drop on new findings is the honest number.</li>
+      <li>In-sample v2 recall was {{in_sample_frac}}. The drop on new findings is the real out-of-sample result.</li>
       <li>A federal single audit is a stand-in for SOX evidence, which is private. This is not a SOX result.</li>
     </ul>
   </div>
-</div></section>
-
-<section class="wrap"><div class="col stack">
-  <h2>The problem</h2>
-  <p>A US organisation that spends $750,000 or more of federal awards in a fiscal year ($1,000,000 for fiscal years from 1 October 2024) must get a single audit. For each finding the auditor writes free text and also files structured flags on form SF-SAC: material weakness or significant deficiency, repeat finding, questioned costs, and the compliance requirement concerned. The same auditor wrote both, so they should agree. When they do not, a reader needs to see both sides and the words behind the claim.</p>
-  <p>auditspan lists every disagreement with the quote and the form value side by side. Accuracy is measured on labelled samples, not asserted.</p>
-  <div class="example stack">{{example}}</div>
 </div></section>
 
 <section class="wrap"><div class="col stack">
@@ -110,6 +137,25 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
 </div></section>
 
 <section class="wrap"><div class="col stack">
+  <h2>Limitations</h2>
+  <ul>
+    <li>The blind labels are from one model labeller, not an auditor, and no person has checked them. The label prompt shares the rule writer's reading of a few cases, so agreement on those is not independent.</li>
+    <li>Rules miss facts stated in unusual ways. Prose-only requirement statements are mostly out of reach.</li>
+    <li>One subset only, FAC acceptances July to December 2025. Findings inside a report are correlated, and the Wilson intervals treat them as independent.</li>
+    <li>The first labelled sample was made by Claude, an Anthropic model, from the text, and the rules were tuned while reading disagreements, so its flag precision is not out-of-sample.</li>
+    <li>Single audits under the Uniform Guidance are a stand-in. Nothing here is a SOX result.</li>
+  </ul>
+  <p><button class="btn" type="button" data-view="details">Technical details →</button></p>
+</div></section>
+</main>
+
+<main id="details" role="tabpanel" aria-labelledby="tab-details" hidden>
+<header class="wrap"><div class="col stack">
+  <p class="eyebrow">Technical details</p>
+  <h1 style="font-size:clamp(1.8rem,4.4vw,2.5rem)">Method, results and data terms</h1>
+</div></header>
+
+<section class="wrap"><div class="col stack">
   <h2>Results on the whole corpus</h2>
   <p>{{findings}} findings in {{reports}} reports from FAC acceptances July to December 2025. The rates are text-versus-form disagreement, with Wilson intervals. A disagreement means the two differ, not which one is wrong.</p>
   {{field_table}}
@@ -121,29 +167,45 @@ footer { padding-block:2rem 3rem; border-top:1px solid var(--line); }
   <h2>What v2 changed, and the blind test</h2>
   <p>v1 reads only labelled lines for the compliance requirement, so its requirement recall is low. v2 also reads the finding's title line, more label wordings and explicit letter codes, and stops counting two things as disagreements: A versus B (auditors file either letter when the tests are done together, {{v2_a_vs_b}} findings) and a form that says P, Other ({{v2_uncheckable}} findings), which the text cannot be checked against. A versus B is reported separately.</p>
   <p>The v2 rules were written while reading a labelled sample, so their scores there are in-sample. The rules were frozen at git tag <code>v2-rules-frozen</code>. Then {{drawn}} findings were drawn at random from those not read during development and labelled by Codex from the text alone. One has the same text as a development finding and is left out, leaving {{blind_n}}.</p>
-  <div class="bars">{{bars}}</div>
-  <p class="small muted">Recall of requirements stated in a label or title, on the blind findings.</p>
   {{heldout_table}}
-  <p class="small muted">Codex labelled {{codex_label}} findings by a labelled line, {{codex_title}} by title, {{codex_prose}} by a body sentence and {{codex_none}} as none. v2.1 fixes review findings and is not blind.</p>
+  <p class="small muted">Codex labelled {{codex_label}} findings by a labelled line, {{codex_title}} by title, {{codex_prose}} by a body sentence and {{codex_none}} as none. v2.1 holds fixes made after reading the hold-out errors, so it is not blind.</p>
   <h3>Second-model adjudication (not blind, not a person's check)</h3>
   <p>A separate label set for the 30 hold-out findings where v2, Codex and the form disagree in a way that moves a score. ChatGPT decided them after seeing the v2 letters, the Codex labels and the form, so it is not blind. Claude then corrected three answers (items 1, 4 and 12) that counted body text where the protocol does not. {{second_changed}} labels change. No person has checked them, and the blind row above stays the headline. The protocol and all 30 decisions are in <code>study/adjudication/</code>.</p>
   {{second_model_table}}
 </div></section>
 
 <section class="wrap"><div class="col stack">
-  <h2>Limitations</h2>
-  <ul>
-    <li>The blind labels are from one model labeller, not an auditor, and no person has checked them. The label prompt shares the rule writer's reading of a few cases, so agreement on those is not independent.</li>
-    <li>Rules miss facts stated in unusual ways. Prose-only requirement statements are mostly out of reach.</li>
-    <li>One subset only, FAC acceptances July to December 2025. Findings inside a report are correlated, and the Wilson intervals treat them as independent.</li>
-    <li>The first labelled sample was made by Claude from the text, and the rules were tuned while reading disagreements, so its flag precision is not out-of-sample.</li>
-    <li>Single audits under the Uniform Guidance are a stand-in. Nothing here is a SOX result.</li>
-  </ul>
+  <h2>Data and licenses</h2>
+  <p>Data: the Federal Audit Clearinghouse (U.S. General Services Administration), which states its data is free to use and in the public domain. The pinned subset, its sha256 manifest and the quoted terms are in <code>data/</code>. The code is MIT.</p>
 </div></section>
 
-<footer class="wrap"><div class="col stack small muted">
-  <p><b>Reproduce:</b> <code>make test</code>, <code>make experiment</code>, then <code>make page</code>. Every number on this page is generated from <code>results/*.json</code> and <code>data/</code> by <code>page.py</code>, except the prose.</p>
-  <p>Data: the Federal Audit Clearinghouse (U.S. General Services Administration), which states its data is free to use and in the public domain. Code is MIT. Built with Arcturus (Claude Code builders, Codex review). The labels are model-made and not yet checked by a person.</p>
-</div></footer>
+<section class="wrap"><div class="col stack">
+  <h2>Reproduce</h2>
+<pre>make test
+make experiment
+make page</pre>
+  <p><button class="btn" type="button" data-view="overview">← Overview</button></p>
+</div></section>
+</main>
+
+<footer class="wrap"><div class="wide small muted">auditspan · Yash Gupta · <a href="https://github.com/yashgix/auditspan">github.com/yashgix/auditspan</a></div></footer>
+
+<script>
+const views = ["overview", "details"];
+function show(v) {
+  if (!views.includes(v)) v = "overview";
+  for (const x of views) {
+    document.getElementById(x).hidden = x !== v;
+    document.getElementById("tab-" + x).setAttribute("aria-selected", String(x === v));
+  }
+}
+document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => {
+  history.replaceState(null, "", "#" + b.dataset.view);
+  show(b.dataset.view);
+  window.scrollTo(0, 0);
+}));
+addEventListener("hashchange", () => show(location.hash.slice(1)));
+show(location.hash.slice(1));
+</script>
 </body>
 </html>

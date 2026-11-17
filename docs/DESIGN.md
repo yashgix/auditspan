@@ -12,7 +12,7 @@ text row and have **at least one** form row become `Finding` objects, in text-fi
 out and counted instead of dropped silently:
 
 - `split_texts`: keys with more than one text row. Upstream cut one finding's text across rows, so there is no single
-  text to compare with the form, so the key is excluded rather than guessed at.
+  text to compare with the form. The key is excluded rather than guessed at.
 - `form_only`: form keys with no text row. There is nothing to read.
 
 `Corpus` carries `text_rows` and `form_rows` (all rows read) alongside those two counters, so the metrics can say
@@ -65,8 +65,8 @@ mention are skipped, each for a reason the data forced:
 - a pair just before it (`or`, `and/or`) or just after it — "material weakness or significant deficiency" names
   both without choosing,
 - a definition (`… is a deficiency`) and internal control over financial reporting (`… over financial reporting`
-  within 40 characters). The form's flags are compliance-audit classifications, and the ICFR sentence is a different
-  scope, and the definition is not an instance.
+  within 40 characters). The form's flags are compliance-audit classifications. The ICFR sentence is about a different
+  scope, and a definition is not an instance.
 
 Plural forms never match. "Material weaknesses were noted" is a summary of the report, and matching it was wrong far
 more often than right. When several kinds survive, the first one stands, while the labels take the most severe across the

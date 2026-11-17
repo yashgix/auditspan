@@ -229,8 +229,8 @@ def _heldout_lines(scores: dict) -> list[str]:
 def _v2_1_lines(metrics: dict) -> list[str]:
     return [
         "### Version 2.1, after review (not blind)",
-        "Fixes found by an independent review after the hold-out was scored (SPEC-v2.md section 6). Its hold-out row "
-        "below is therefore not blind. Severity is as in version 1.",
+        "Fixes found by reviewing the code and the hold-out errors after the hold-out was scored (SPEC-v2.md "
+        "section 6). Its hold-out row below is therefore not blind. Severity is as in version 1.",
         *(_comparison_line(metrics, field) for field in ("repeat", "questioned_costs", "requirements")),
     ]
 

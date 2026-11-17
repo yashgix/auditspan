@@ -140,6 +140,15 @@ so its row is not blind. The labels' own limits are in `SPEC-v2.md` section 5: t
 writer's reading of a few cases, and no person has checked the labels yet. The ids, labels, prompt and draw script are
 in `study/heldout/` with checksums.
 
+The draw script is kept exactly as it was run, so it imports the package under the name it had at the frozen tag.
+To redraw the hold-out, run it against a checkout of that tag. It prints `6047 in pool, 150 drawn with seed 20261115`
+and writes the same 150 ids, in the same order, as `study/heldout/ids.txt`:
+
+```
+git worktree add ../auditspan-v2 v2-rules-frozen
+python -I study/heldout/draw.py ../auditspan-v2 study/heldout/dev-ids.jsonl /tmp/heldout.jsonl
+```
+
 <!-- results:start -->
 Corpus: 6271 findings in 3293 reports, from 8772 text rows and 21183 form rows. 151 split texts and 396 form-only findings are left out. Cited facts: 9503, of which 9503 are an exact copy of their source span (this checks the copying, not that each quote supports its fact).
 

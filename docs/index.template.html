@@ -111,7 +111,7 @@ pre { margin:0; background:var(--band); border:1px solid var(--line); border-rad
     <ul>
       <li>The labels come from Codex, an OpenAI model, labelling blind from the text alone. No person has checked them yet. The label prompt's examples share the rule writer's reading of a few cases.</li>
       <li>A second model re-decided the 30 disputed findings after seeing the v2 letters, the Codex labels and the form. That row is shown apart, and it is not blind.</li>
-      <li>v2.1 came from a review after the score, so it is not blind. It removes the {{v2_false_positive}} false positives and leaves recall unchanged.</li>
+      <li>v2.1 was fixed after reading the hold-out errors, so it is not blind. It removes the {{v2_false_positive}} false positives and leaves recall unchanged.</li>
       <li>In-sample v2 recall was {{in_sample_frac}}. The drop on new findings is the real out-of-sample result.</li>
       <li>A federal single audit is a stand-in for SOX evidence, which is private. This is not a SOX result.</li>
     </ul>

@@ -153,7 +153,7 @@ The sample is a fixed artefact in `data/labels.json`, so the metrics are reprodu
 ## 7. Trade-offs and known error sources
 
 - **`flag_precision` is in-sample.** The rules were tuned while reading flagged disagreements with the form values
-  visible, in the same session that later labelled the disagreement strata. Only the random stratum is out of sample.
+  visible, and the same labeller later labelled the disagreement strata. Only the random stratum is out of sample.
 - **Multi-part findings.** A finding can carry a material weakness for one requirement and a significant deficiency
   for another. The extractor takes the first mention, while the labels keep the most severe. Severity disagreements from
   this cause are expected, and the severity text-versus-form table makes them visible.

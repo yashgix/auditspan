@@ -15,7 +15,7 @@ the requirements the text states in a label or title, against 9/79 = 11.4% for v
 - A second model (ChatGPT) re-decided the 30 disputed findings after seeing the v2 letters, the Codex labels and the
   form, and Claude corrected three of its answers to the protocol. That row is shown apart below. It is not blind and
   not a person's check.
-- v2.1 is a fix made after reviewing that score, so it is not blind. It removes the 3 false positives and leaves
+- v2.1 was fixed after reading the hold-out errors, so it is not blind. It removes the 3 false positives and leaves
   recall unchanged.
 - On the labelled sample used while writing the rules, v2 recall was 47/50. The drop to 54/79 on new findings is the
   real out-of-sample result.
@@ -112,7 +112,7 @@ The FAC adds and amends records, so a later download may differ. The manifest sa
 
 ## Results
 
-The block below is rendered from the JSON files in `results/` and from `data/`. No number in it is typed by hand.
+The block below is rendered from the JSON files in `results/` and from `data/`. Every number in it comes from those files.
 Re-render it with `python demo.py --readme README.md --out README.md` after re-running the experiment.
 
 Read the per-field lines carefully: `9 form rows differ` counts **findings**, not rows: the findings whose filed
@@ -181,8 +181,8 @@ Labelled sample, version 2. The version 2 rules were written while reading this 
 | --- | --- | --- | --- | --- |
 | requirements | 2023-09-GSAFAC-0000374131 2023-003 | ABE | E | Compliance Requirement: Eligibility and Allowable Activities/Costs |
 
-### Version 2.1, after review (not blind)
-Fixes found by reviewing the code and the hold-out errors after the hold-out was scored (SPEC-v2.md section 6). Its hold-out row below is therefore not blind. Severity is as in version 1.
+### Version 2.1, fixed after reading the hold-out errors (not blind)
+Fixes made after reading the hold-out errors, once the hold-out was scored (SPEC-v2.md section 6). Its hold-out row below is therefore not blind. Severity is as in version 1.
 - repeat: 2474 covered, 2452 agree, 22 disagree (0.9% [0.5%, 1.4%]) in 19 reports, 26 form rows differ.
 - questioned costs: 3474 covered, 3437 agree, 37 disagree (1.1% [0.7%, 1.5%]) in 32 reports, 17 form rows differ.
 - requirements: 2445 covered, 2268 agree, 83 disagree (3.4% [2.6%, 4.3%]) in 71 reports, 33 form rows differ.
@@ -194,7 +194,7 @@ Fixes found by reviewing the code and the hold-out errors after the hold-out was
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | v1 | 9 | 100.0% [70.1%, 100.0%] (9/9) | 0 | 0 | 11.4% [6.1%, 20.3%] (9/79) | 12.2% [6.5%, 21.5%] (9/74) | 8.5% [4.5%, 15.4%] (9/106) |
 | v2 (frozen, blind) | 59 | 91.5% [81.6%, 96.3%] (54/59) | 3 | 0 | 68.4% [57.5%, 77.6%] (54/79) | 74.3% [63.3%, 82.9%] (55/74) | 50.9% [41.6%, 60.3%] (54/106) |
-| v2.1 (after review, not blind) | 56 | 96.4% [87.9%, 99.0%] (54/56) | 0 | 0 | 68.4% [57.5%, 77.6%] (54/79) | 74.3% [63.3%, 82.9%] (55/74) | 50.9% [41.6%, 60.3%] (54/106) |
+| v2.1 (fixed after reading hold-out errors, not blind) | 56 | 96.4% [87.9%, 99.0%] (54/56) | 0 | 0 | 68.4% [57.5%, 77.6%] (54/79) | 74.3% [63.3%, 82.9%] (55/74) | 50.9% [41.6%, 60.3%] (54/106) |
 
 - Codex labels: 35 label, 44 title, 27 body sentence, 43 none. 11 include P (Other), which no rule emits. Against the form: 84 agree, 19 disagree, 0 a_vs_b, 3 uncheckable.
 - v2 facts against the form: 55 agree, 3 disagree, 0 a_vs_b, 1 uncheckable. v2.1 facts against the form: 54 agree, 2 disagree, 0 a_vs_b, 0 uncheckable.
@@ -212,7 +212,7 @@ A separate label set for the 30 hold-out findings where v2, Codex and the form d
 - The labelled sample in `data/labels.json` is by one AI labeller (Claude, an Anthropic model) from the text alone,
   not by an auditor, and no person has checked it. A disagreement means the text and the form differ. It does not
   say which one is wrong.
-- The rules were tuned while reading about 80 flagged disagreements with form values visible, in the same session that
+- The rules were tuned while reading about 80 flagged disagreements with form values visible, and the same labeller
   later labelled the disagreement strata. `flag_precision` is therefore not an out-of-sample measure. Only the random
   stratum is, and about 2 of its 100 findings may overlap those read during development.
 - Rules miss facts stated in unusual ways. Recall is reported per field and is low for requirements, where only

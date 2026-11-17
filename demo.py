@@ -25,7 +25,7 @@ NOTE = (
     "ChatGPT decided them after seeing the v2 letters, the Codex labels and the form, so it is not blind. "
     "Claude then corrected three answers (items 1, 4 and 12) that counted body text where the protocol does not."
 )
-HELDOUT_ROWS = {"v1": "v1", "v2": "v2 (frozen, blind)", "v2.1": "v2.1 (after review, not blind)"}
+HELDOUT_ROWS = {"v1": "v1", "v2": "v2 (frozen, blind)", "v2.1": "v2.1 (fixed after reading hold-out errors, not blind)"}
 
 
 def _text(value: str | bool) -> str:
@@ -228,9 +228,9 @@ def _heldout_lines(scores: dict) -> list[str]:
 
 def _v2_1_lines(metrics: dict) -> list[str]:
     return [
-        "### Version 2.1, after review (not blind)",
-        "Fixes found by reviewing the code and the hold-out errors after the hold-out was scored (SPEC-v2.md "
-        "section 6). Its hold-out row below is therefore not blind. Severity is as in version 1.",
+        "### Version 2.1, fixed after reading the hold-out errors (not blind)",
+        "Fixes made after reading the hold-out errors, once the hold-out was scored (SPEC-v2.md section 6). Its "
+        "hold-out row below is therefore not blind. Severity is as in version 1.",
         *(_comparison_line(metrics, field) for field in ("repeat", "questioned_costs", "requirements")),
     ]
 
